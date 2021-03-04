@@ -1,0 +1,22 @@
+{
+  "name": "kz.layedit",
+  "version": "19.4.12",
+  "description": "Kz.layedit 富文本编辑器",
+  "main": "Content/Layui-KnifeZ/lay/modules/layedit.js",
+  "scripts": {
+    "start": "node dev-server/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/KnifeZ/Kz.layedit"
+  },
+  "keywords": [
+    "layedit"
+  ],
+  "author": "KnifeZ",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "multer": "^1.4.2"
+  }
+}
