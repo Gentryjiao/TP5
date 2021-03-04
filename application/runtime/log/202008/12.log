@@ -1,0 +1,28 @@
+---------------------------------------------------------------
+[ 2020-08-12T10:24:49+08:00 ] 127.0.0.1 GET www.kongtiao.com/admin
+[运行时间：0.027002s] [吞吐率：37.03req/s] [内存消耗：1,061.02kb] [文件加载：24]
+[ info ] [ LANG ] F:\phpstudy_pro\WWW\kongtiao\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'cookie' => 'Hm_lvt_d214947968792b839fd669a4decaaffc=1597117675; PHPSESSID=9jrla7dhb39vgjc0llo9cacu67',
+  'accept-language' => 'zh-CN,zh;q=0.9',
+  'accept-encoding' => 'gzip, deflate',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'cache-control' => 'max-age=0',
+  'connection' => 'close',
+  'host' => 'www.kongtiao.com',
+)
+[ info ] [ PARAM ] array (
+  '/admin' => '',
+)
+[ info ] [ LOG ] INIT File

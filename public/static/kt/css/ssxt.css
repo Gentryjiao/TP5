@@ -1,0 +1,58 @@
+.ban2{ width:100%; height:245px; position:relative; overflow:hidden;margin-top: 50px;background-color: #fff;}
+.ban2 ul{ position:absolute; left:0; top:20px;}
+.ban2 ul li{ width:270px; height:500px;float: left;margin-left: 10px;}
+.prev{ float:left; cursor:pointer;}
+.prev1{ position:absolute; top:90px; left:20px; width:28px; height:51px;z-index:9;cursor:pointer;}
+.next1{ position:absolute; top:90px; right:20px; width:28px; height:51px;z-index:9;cursor:pointer;}
+
+
+
+.ssxt-on{background-color: #fff;}
+.ssxt-on div img{width: 270px;height: 180px;}
+.ssxt-name{width: 100%;height: 32px; text-align: center;background-color: #ccc;line-height:34px;cursor: pointer;}
+.ssxt-name:hover{background-color: #d02222;color: #fff;}
+.ssxt-bto2 ul li{display: flex;padding-left: 15px;}
+.ssxt-bto2 ul li div{margin-right: 10px;vertical-align: middle;margin-top: 5px;}
+.ssxt-bto2 ul li span a{color: #000;}
+.ssxt-bto2 ul li span a:hover{color: blue;}
+.ssxt-bto {margin-bottom: 50px;margin-top: 50px;}
+.ssxt-bto .ssxt-bto1 ul .ssxt-bto-li{width: 100%;margin-bottom: 20px;}
+.ssxt-bto .ssxt-bto1 ul li .ssxt-bto2{}
+.ssxt-bto .ssxt-bto1 ul li .ssxt-bto2 img{width: 100%;height: 118px;}
+.ssxt-bto .ssxt-bto1 ul li .ssxt-bto2 ul{}
+.ssxt-bto .ssxt-bto1 ul li .ssxt-bto2 ul li{margin-bottom: 10px;}
+.ssxt-bto3{background-color: #ccc;width: 10px;height: 10px;}
+.ssxt-bto2 ul li{float: none;}
+.ssxt-ul1 {display: flex;justify-content: space-between;flex-wrap: wrap;}
+.ssxt-ul1-li{width: 100%;}
+
+
+
+
+
+
+@media (min-width: 1200px) {
+
+}
+
+@media (min-width: 992px) {
+.num ul{ position:absolute; left:0; top:0;}
+.num ul li{ width:270px; height:220px; margin-right:5px; padding:1px;}
+.num ul li div img{ width: 100%;}
+.num ul li.on{ border:1px solid red; padding:0;}
+.prev_btn1{ width:16px; text-align:center; height:18px; margin-top:80px; margin-right:20px; cursor:pointer; float:left;}
+.next_btn1{  width:16px; text-align:center; height:18px; margin-top:80px;cursor:pointer;float:right;}
+.ssxt-on{background-color: #fff;}
+.ssxt-name{width: 100%;height: 32px; text-align: center;background-color: #ccc;line-height:34px;}
+
+
+.ssxt-ul1{display: flex;}
+.ssxt-ul1-li{float: right;}
+.ssxt-ul1-li{width: 24%;}
+
+.ssxt-bto .ssxt-bto1 ul .ssxt-bto-li{width: 24%;margin-bottom: 20px;}
+}
+
+@media (min-width: 768px) {
+	.ssxt-bto .ssxt-bto1 ul li .ssxt-bto2 img{width: 100%;}
+}

@@ -1,0 +1,108 @@
+---------------------------------------------------------------
+[ 2020-08-11T19:30:31+08:00 ] 127.0.0.1 GET www.kongtiao.com/
+[运行时间：0.066003s] [吞吐率：15.15req/s] [内存消耗：1,058.29kb] [文件加载：24]
+[ info ] [ LANG ] F:\phpstudy_pro\WWW\kongtiao\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'cookie' => 'PHPSESSID=s5uq9nkom4d2ebei1frm6l4989; Hm_lvt_d214947968792b839fd669a4decaaffc=1597117675; Hm_lpvt_d214947968792b839fd669a4decaaffc=1597117731',
+  'accept-language' => 'zh-CN,zh;q=0.9',
+  'accept-encoding' => 'gzip, deflate',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'cache-control' => 'max-age=0',
+  'connection' => 'close',
+  'host' => 'www.kongtiao.com',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2020-08-11T19:30:34+08:00 ] 127.0.0.1 GET www.kongtiao.com/
+[运行时间：0.046003s] [吞吐率：21.74req/s] [内存消耗：1,058.29kb] [文件加载：24]
+[ info ] [ LANG ] F:\phpstudy_pro\WWW\kongtiao\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'cookie' => 'PHPSESSID=s5uq9nkom4d2ebei1frm6l4989; Hm_lvt_d214947968792b839fd669a4decaaffc=1597117675; Hm_lpvt_d214947968792b839fd669a4decaaffc=1597117731',
+  'accept-language' => 'zh-CN,zh;q=0.9',
+  'accept-encoding' => 'gzip, deflate',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'cache-control' => 'max-age=0',
+  'connection' => 'close',
+  'host' => 'www.kongtiao.com',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2020-08-11T19:30:35+08:00 ] 127.0.0.1 GET www.kongtiao.com/
+[运行时间：0.047003s] [吞吐率：21.28req/s] [内存消耗：1,058.29kb] [文件加载：24]
+[ info ] [ LANG ] F:\phpstudy_pro\WWW\kongtiao\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'cookie' => 'PHPSESSID=s5uq9nkom4d2ebei1frm6l4989; Hm_lvt_d214947968792b839fd669a4decaaffc=1597117675; Hm_lpvt_d214947968792b839fd669a4decaaffc=1597117731',
+  'accept-language' => 'zh-CN,zh;q=0.9',
+  'accept-encoding' => 'gzip, deflate',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'cache-control' => 'max-age=0',
+  'connection' => 'close',
+  'host' => 'www.kongtiao.com',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2020-08-11T19:30:47+08:00 ] 127.0.0.1 GET www.kongtiao.com/admin
+[运行时间：0.060003s] [吞吐率：16.67req/s] [内存消耗：1,060.84kb] [文件加载：24]
+[ info ] [ LANG ] F:\phpstudy_pro\WWW\kongtiao\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'cookie' => 'PHPSESSID=s5uq9nkom4d2ebei1frm6l4989; Hm_lvt_d214947968792b839fd669a4decaaffc=1597117675; Hm_lpvt_d214947968792b839fd669a4decaaffc=1597117731',
+  'accept-language' => 'zh-CN,zh;q=0.9',
+  'accept-encoding' => 'gzip, deflate',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'close',
+  'host' => 'www.kongtiao.com',
+)
+[ info ] [ PARAM ] array (
+  '/admin' => '',
+)
+[ info ] [ LOG ] INIT File

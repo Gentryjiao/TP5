@@ -1,0 +1,49 @@
+/* 重置 [[*/
+body,p,ul,li,h1,h2,form,input{margin:0;padding:0;}
+h1,h2{font-size:100%;}
+ul{list-style:none;}
+body{-webkit-user-select:none;-webkit-text-size-adjust:none;font-family:Helvetica;background:#ECECEC;}
+html,body{height:100%;}
+a,button,input,img{-webkit-touch-callout:none;outline:none;}
+a{text-decoration:none;}
+/* 重置 ]]*/
+/* 功能 [[*/
+.hide{display:none!important;}
+.cf:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+/* 功能 ]]*/
+/* 按钮 [[*/
+a[class*="btn"]{display:block;height:42px;line-height:42px;color:#FFFFFF;text-align:center;border-radius:5px;}
+.btn-blue{background:#3D87C3;border:1px solid #1C5E93;}
+.btn-green{background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0, #43C750), color-stop(1, #31AB40));border:1px solid #2E993C;box-shadow:0 1px 0 0 #69D273 inset;}
+/* 按钮 [[*/
+/* 充值页 [[*/
+.charge{font-family:Helvetica;padding-bottom:10px;-webkit-user-select:none;}
+.charge h1{height:44px;line-height:44px;color:#FFFFFF;background:#3D87C3;text-align:center;font-size:20px;-webkit-box-sizing:border-box;box-sizing:border-box;}
+.charge h2{font-size:14px;color:#777777;margin:5px 0;text-align:center;}
+.charge .content{padding:10px 12px;}
+.charge .select li{position:relative;display:block;float:left;width:100%;margin-right:2%;height:150px;line-height:150px;text-align:center;border:1px solid #BBBBBB;color:#666666;font-size:16px;margin-bottom:5px;border-radius:3px;background-color:#FFFFFF;-webkit-box-sizing:border-box;box-sizing:border-box;overflow:hidden;display: flex;align-items: center;justify-content: center;}
+.charge .price{border-bottom:1px dashed #C9C9C9;padding:10px 10px 15px;margin-bottom:20px;color:#666666;font-size:12px;}
+.charge .price strong{font-weight:normal;color:#EE6209;font-size:26px;font-family:Helvetica;}
+.charge .showaddr{border:1px dashed #C9C9C9;padding:10px 10px 15px;margin-bottom:20px;color:#666666;font-size:12px;text-align:center;}
+.charge .showaddr strong{font-weight:normal;color:#9900FF;font-size:26px;font-family:Helvetica;}
+.charge .copy-right{margin:5px 0; font-size:12px;color:#848484;text-align:center;}
+/* 充值页 ]]*/
+.mode{background-color: rgba(1,1,1,0.5);position: fixed;top: 0;left: 0;width: 100%;height: 100%;display: none;z-index: 200;}
+.mode .mode-center{width: 80%;padding: 20px 20px 10px 20px;border-radius: 10px;background-color: #fff;margin: 100px auto 0 auto;}
+.mode .mode-center ul{}
+.mode .mode-center ul li{margin-bottom: 20px;padding-bottom: 10px;}
+.mode .mode-center ul li.li1{position: relative;text-align: center;}
+.mode .mode-center ul li.li1 img{width: 20px;height: 20px;position: absolute;left: 0;}
+.mode .mode-center ul li.li1 p{color: #666;}
+.mode .mode-center ul li.li2{text-align: center;color: #333;}
+.mode .mode-center ul li.li2 p{font-size: 16px;}
+.mode .mode-center ul li.li3{text-align: center;border-bottom: 1px solid #eee;}
+.mode .mode-center ul li.li3 p{font-size: 16px;}
+.mode .mode-center ul li.li3 p b{font-size: 30px;}
+.mode .mode-center ul li.li4{display: flex;justify-content: space-between;}
+.mode .mode-center ul li.li4 .li4-title{}
+.mode .mode-center ul li.li4 .li4-one{position: relative;}
+.mode .mode-center ul li.li4 .li4-one .li4-one-name{}
+.mode .mode-center ul li.li4 .li4-one .li4-one-ul{display: none;border: 1px solid #eee;background-color: #fff;border-radius: 8px;position: absolute;top: 30px;right: 0;}
+.mode .mode-center ul li.li4 .li4-one .li4-one-ul p{white-space: nowrap;padding: 6px 12px;color: #666;}
+.mode .mode-center ul li.li4 .li4-one .li4-one-ul p.on{color: #333;}

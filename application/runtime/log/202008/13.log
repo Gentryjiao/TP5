@@ -1,0 +1,55 @@
+---------------------------------------------------------------
+[ 2020-08-13T19:28:39+08:00 ] 127.0.0.1 GET www.kongtiao.com/admin/index/Jnotice
+[运行时间：0.038002s] [吞吐率：26.31req/s] [内存消耗：1,060.98kb] [文件加载：24]
+[ info ] [ LANG ] F:\phpstudy_pro\WWW\kongtiao\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'admin',
+    1 => 'index',
+    2 => 'Jnotice',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'cookie' => 'Hm_lvt_d214947968792b839fd669a4decaaffc=1597117675; PHPSESSID=rr10cel15hmffvn6rbarjlukmh',
+  'accept-language' => 'zh-CN,zh;q=0.9',
+  'accept-encoding' => 'gzip, deflate',
+  'referer' => 'http://www.kongtiao.com/admin/index/index.html',
+  'x-requested-with' => 'XMLHttpRequest',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36',
+  'accept' => 'application/json, text/javascript, */*; q=0.01',
+  'connection' => 'close',
+  'host' => 'www.kongtiao.com',
+)
+[ info ] [ PARAM ] array (
+  '/admin/index/Jnotice' => '',
+)
+[ info ] [ LOG ] INIT File
+---------------------------------------------------------------
+[ 2020-08-13T19:28:42+08:00 ] 127.0.0.1 GET www.kongtiao.com/
+[运行时间：0.044002s] [吞吐率：22.73req/s] [内存消耗：1,057.84kb] [文件加载：24]
+[ info ] [ LANG ] F:\phpstudy_pro\WWW\kongtiao\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => '',
+    1 => NULL,
+    2 => NULL,
+  ),
+)
+[ info ] [ HEADER ] array (
+  'cookie' => 'Hm_lvt_d214947968792b839fd669a4decaaffc=1597117675; PHPSESSID=rr10cel15hmffvn6rbarjlukmh',
+  'accept-language' => 'zh-CN,zh;q=0.9',
+  'accept-encoding' => 'gzip, deflate',
+  'purpose' => 'prefetch',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'connection' => 'close',
+  'host' => 'www.kongtiao.com',
+)
+[ info ] [ PARAM ] array (
+)
+[ info ] [ LOG ] INIT File

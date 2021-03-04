@@ -1,0 +1,40 @@
+
+.a1{background-color: red;width: 400px;height: 200px;font-size: 28px;text-align:center;}
+.i1{border:1px solid black;padding-left: 20px;}
+.a2{font-size: 14px;background-color: red;}
+
+
+
+
+
+
+
+
+
+
+
+/*********************/
+@media (min-width:375px) {
+  .container {
+    width: 750px;
+    
+  }.a2{font-size: 28px; color: black;}
+}
+@media (min-width: 768px) {
+  .container {
+    width: 750px;
+  }
+  .qeb-sm{font-size: 14px;font-weight: bold;color: blue;}
+}
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+  .qeb-sm{font-size: 14px;font-weight: bold;color: green;}
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1230px;
+  }
+   .qeb-sm{font-size: 14px;font-weight: bold;color: #fff;}
+}
