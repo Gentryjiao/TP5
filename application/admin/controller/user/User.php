@@ -1,155 +1,79 @@
 <?php
-
 namespace app\admin\controller\user;
 use think\Db;
 use think\Request;
 use app\admin\controller\AuthController;
-use service\UtilService as Util;
-use app\admin\model\user\User as UserModel;
-/**
- * TODO 附件控制器
- * Class Images
- * @package app\admin\controller\widget
- */
+use app\admin\model\User as userModel;
 class User extends AuthController
 {
-    /**
-     * 显示资源列表
-     *
-     * @return \think\Response
-     */
-    public function index()
-    {
+    public function index(){
         return $this->fetch();
     }
-
     public function getlist(){
-        $where = Util::getMore([
-            ['is_show',$this->request->post('is_show','')],
-            ['phone',$this->request->post('phone','')],
-            ['page',$this->request->post('page',1)],
-            ['limit',$this->request->post('limit',20)],
-            ['order','id','desc'],
-            ['name',$this->request->post('name','')],
-            ['field','nickname,image,sex,phone,create_time,login_time,is_show,id,is_on,lv,user_jifen,group_jifen,code,pcode,zsname,baozhengjin,yve'],
-        ]);
-        $data=UserModel::getList($where);
+        $page=Request()->param('page','1');
+        $limit=Request()->param('limit','15');
+        $vip_id=Request()->param('vip_id','');
+        $where=[
+            'page'=>$page,
+            'limit'=>$limit,
+            'order'=>Request()->param('order','id'),
+            'is_show'=>Request()->param('is_show',''),
+            'phone'=>Request()->param('phone',''),
+            'status_post'=>Request()->param('status_post',''),
+            'status'=>Request()->param('status',''),
+            'vip_id'=>$vip_id,
+            'field'=>'*'
+        ];
+        $data=userModel::getList($where);
         return $data;
     }
 
-    public function jihuo(Request $re){
-        $id=$re->post('id');
-        $user=Db('user')->where('id',$id)->field('is_on,pcode')->find();
-        if($user['is_on']==0){
-            $pid=$this->creep($user['pcode']);
-            if($pid==0){
-                return json(['status'=>'error','msg'=>'父级尚未进入架构树']);
-            }
-            $res=Db('user')->where('id',$id)->update(['is_on'=>1,'baozhengjin'=>300,'pid'=>$pid,'lv'=>1]);
-            if($res){
-                Db('user_details')->insert(['date'=>date('Y-m-d'),'use'=>'用户激活','money'=>'+300','user_id'=>$id]);
-                return json(['status'=>'success','msg'=>'激活成功']);
-            }else{
-                return json(['status'=>'error','msg'=>'激活失败']);
-            }
-        }
-    }
-
-    //寻找子级最少的用户 进行分配
-    public function creep($pcode){
-        if(empty($pcode))return 0;
-        $user=Db('user')->where('code',$pcode)->where(['is_on'=>'1'])->find();
-        if(empty($user))return 0;
-        $puser=Db('user')->where('pid','IN',$user['id'])->order('id')->select();
-        if(count($puser)<3){
-            return $user['id'];
-        }
-        $arr=[];
-        foreach($puser as $k=>$v){
-            $arr[]=$v['id'];
-        }
-        return $this->down($arr);
-    }
-
-    //递归
-    public function down($id){
-        foreach($id as $v){
-            $count[$v]=Db('user')->where('pid',$v)->count();
-        }
-        foreach($count as $k=>$v){
-            if($v!=3){
-                if($v==0){
-                    return $k;
-                }
-            }
-        }
-        foreach($count as $k=>$v){
-            if($v!=3){
-                if($v==1){
-                    return $k;
-                }
-            }
-        }
-        foreach($count as $k=>$v){
-            if($v!=3){
-                if($v==2){
-                    return $k;
-                }
-            }
-        }
-        $arr=[];
-        $data=Db('user')->where('pid','IN',$id)->field('id')->order('id')->select();
-        foreach($data as $k=>$v){
-            $arr[]=$v['id'];
-        }
-        return $this->down($arr);
-    }
-
-    /**
-     * 保存更新的资源
-     *
-     * @param  \think\Request  $request
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function update1(Request $request, $id)
-    {
-        $data = Util::getMore([
-            ['value',$request->post('value','')],
-            ['field',$request->post('field')],
+    //审核身份
+    public function shenhe(){
+        $id=Request()->post('id');
+        $user=Db::name('user')->find($id);
+        $card_image=$user['card_image'];
+        $card_image_arr=explode('|',$card_image);
+        $this->assign([
+            'user'=>$user,
+            'card_image'=>$card_image_arr
         ]);
-        if($data['value']=='') return json(['status'=>'error','msg'=>'值不能为空']);
-        $edit=[
-            $data['field']=>$data['value'],
+        return view();
+    }
+    //审核身份通过
+    public function shenhe_succ(){
+        $id=Request()->post('id');
+        $user=Db::name('user')->where('id',$id)->update(['real_status'=>1]);
+        $data=[
+            'sort_title'=>'实名认证消息',
+            'title'=>'认证通过',
+            'text'=>'您的实名认证已经通过!',
+            'create_time'=>time(),
+            'uid'=>$id
         ];
-        if($data['field']=='lv'){
-            $is_on=UserModel::get($id)['is_on'];
-            if($is_on=='1'){
-                $lv=Db('user_lv')->where('level',$data['value'])->field('user_min,group_min')->find();
-                if($lv){
-                    $edit['user_jifen']=$lv['user_min'];
-                    $edit['group_jifen']=$lv['group_min'];
-                }else{
-                    return json(['status'=>'error','msg'=>'没有对应的等级']);
-                }
-            }else{
-                return json(['status'=>'error','msg'=>'请先激活该用户']);
-            }
-            
-        }
-        if(UserModel::edit($edit,$id)){
-            return json(['status'=>'success','msg'=>'操作成功']);
-        }else{
-            return json(['status'=>'error','msg'=>'操作失败']);
-        }
+        Db::name('information')->insert($data);
+
+        if($user) return json(['status'=>'success','msg'=>'实名成功']);
+    }
+    //审核身份拒绝
+    public function shenhe_err(){
+        $id=Request()->post('id');
+        $user=Db::name('user')->where('id',$id)->update(['real_status'=>3]);
+        $data=[
+            'sort_title'=>'实名认证消息',
+            'title'=>'认证失败',
+            'text'=>'您的实名认证未通过，请重新认证！',
+            'create_time'=>time(),
+            'uid'=>$id
+        ];
+        Db::name('information')->insert($data);
+        if($user) return json(['status'=>'success','msg'=>'已拒绝']);
     }
 
+
+    //删除用户
     public function delete(Request $re){
         $id=$re->post('id');
-        $user=Db('user')->where('id',$id)->where('is_on','1')->count();
-        if($user==1){
-            return json(['status'=>'error','msg'=>'已激活的用户不可删除!']);
-        }
         $res=Db('user')->where('id',$id)->delete();
         if($res){
             return json(['status'=>'success','msg'=>'删除成功']);
@@ -157,4 +81,73 @@ class User extends AuthController
             return json(['status'=>'error','msg'=>'删除失败']);
         }
     }
+
+    //显示隐藏
+    public function isshow(){
+        $post=$this->request->post();
+        $res=usermodel::update($post);
+        if($res){
+            if($post['is_show']=='false'){
+                $data=[
+                    'sort_title'=>'账号冻结',
+                    'title'=>'账号被冻结',
+                    'text'=>'因违反平台有关规定，您的账号现已被限制发布，请联系管理员！',
+                    'create_time'=>time(),
+                    'uid'=>$post['id']
+                ];
+                Db::name('information')->insert($data);
+            }
+            if($post['is_show']=='true'){
+                $data=[
+                    'sort_title'=>'账号解冻',
+                    'title'=>'账号已解冻',
+                    'text'=>'账号已解冻，可正常进行发布！',
+                    'create_time'=>time(),
+                    'uid'=>$post['id']
+                ];
+                Db::name('information')->insert($data);
+            }
+            return json(['status'=>'success','msg'=>'操作成功']);
+        }else{
+            return json(['status'=>'success','msg'=>'操作失败']);
+        }
+    }
+
+    //详情
+    public function details(Request $re){
+        $id=$re->post('id');
+        $user=Db::name('user')->find($id);
+        $this->assign('data',$user);
+        return view();
+    }
+
+    //企业
+    public function qiye(Request $re){
+        $id=$re->param('id');
+        $data=Db::name('enterprise')->where(['uid'=>$id,'is_on'=>0])->find();
+        $this->assign('data',$data);
+        return view();
+    }
+    //企业
+    public function qiye_shenge(Request $re){
+        $data=$re->param();
+        $ent=Db::name('enterprise')->where(['uid'=>$data['id'],'is_on'=>0])->find();
+        $res=Db::name('enterprise')->where('uid',$data['id'])->update(['is_on'=>$data['is_on']]);
+        if($data['is_on']==1){
+            if($ent['status']==1) Db::name('user')->where('id',$data['id'])->update(['is_qi'=>1]);
+            if($ent['status']==2) Db::name('user')->where('id',$data['id'])->update(['is_qi'=>2]);
+        }
+        if($res) return json(['status'=>'success','msg'=>'操作成功']);
+    }
+
+
+
+    //查看积分
+    public function integral(){
+        $user_id=Request()->param('id');
+        $data=Db::name('integral')->where('uid',$user_id)->select();
+        $this->assign('data',$data);
+        return view();
+    }
+
 }
