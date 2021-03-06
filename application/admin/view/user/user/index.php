@@ -105,7 +105,7 @@ layui.use('table', function(){
         var index=layer.open({
             type:2,
             title:'查看详情',
-            area:['70%','70%'],
+            area:['90%','90%'],
             content:'/admin/user.user/details?id='+id,
 
         })

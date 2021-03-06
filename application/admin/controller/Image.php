@@ -183,6 +183,20 @@ class Image extends Controller
         }
     }
 
+    /**
+     * 上传图片
+     * @return \think\response\Json
+     */
+    public function layuiupload()
+    {
+        $res = Upload::file('file','store/product/'.date('Ymd'));
+        if($res){
+            return json(['code'=>0,'msg'=>'上传成功','data'=>['src'=>$res->filePath]]);
+        }else{
+            return json(['code'=>1,'msg'=>'上传失败']);
+        }
+    }
+
 
     public function delete(Request $re){
         $id=$re->post('id');
