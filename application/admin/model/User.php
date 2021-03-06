@@ -28,33 +28,6 @@ class User extends ModelBasic
         $count=self::systemPage($where,true)->count();
         $code=0;
 
-        $viplist=Db::name('viplist')->select();
-        $enter=Db::name('enterprise')->where('is_on',0)->select();
-        //时间戳转换
-        for($i=0;$i<$count;$i++){
-            $data[$i]['enter']=0;
-            $vip_expire_time=$data[$i]['vip_expire_time'];
-            $data[$i]['vip_expire_time']= date('Y-m-d h:i:s',(int)$vip_expire_time);
-            $vip_create_time=$data[$i]['vip_create_time'];
-            $data[$i]['vip_create_time']= date('Y-m-d h:i:s',(int)$vip_create_time);
-
-            $data[$i]['vip_title']='暂未开通vip';
-            foreach ($viplist as $k=>$v){
-                if($data[$i]['vip_id']==$v['id']){
-                    $data[$i]['vip_title']=$v['title'];
-                }
-            }
-            foreach($enter as $k=>$v){
-                if($data[$i]['id']==$v['uid']){
-                   if($v['status']==1){
-                       $data[$i]['enter']=1;
-                   }else if($v['status']==2){
-                       $data[$i]['enter']=2;
-                   }
-                }
-            }
-
-        };
         //会员套餐
         return compact('count','data','code');
 

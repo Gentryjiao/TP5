@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
-    <title>登录管理系统 -  惠民助农</title>
+    <title>登录管理系统</title>
     <meta name="generator" content="CRMEB! v2.5" />
     <meta name="author" content="CRMEB! Team and CRMEB UI Team" />
     <link href="{__FRAME_PATH}css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
