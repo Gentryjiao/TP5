@@ -28,7 +28,7 @@ class AlipayTradeService {
 	public $charset = "UTF-8";
 
 	public $token = NULL;
-	
+
 	//返回数据格式
 	public $format = "json";
 
@@ -72,22 +72,23 @@ class AlipayTradeService {
 	 * @return $response 支付宝返回的信息
  	*/
 	function wapPay($builder,$return_url,$notify_url) {
-	
+
 		$biz_content=$builder->getBizContent();
 		//打印业务参数
 		$this->writeLog($biz_content);
-	
+
 		$request = new AlipayTradeWapPayRequest();
-	
+
 		$request->setNotifyUrl($notify_url);
 		$request->setReturnUrl($return_url);
 		$request->setBizContent ( $biz_content );
-	
+
 		// 首先调用支付api
 		$response = $this->aopclientRequestExecute ($request,true);
 		// $response = $response->alipay_trade_wap_pay_response;
 		return $response;
 	}
+
 
 	 function aopclientRequestExecute($request,$ispage=false) {
 
@@ -107,11 +108,11 @@ class AlipayTradeService {
 			$result = $aop->pageExecute($request,"post");
 			echo $result;
 		}
-		else 
+		else
 		{
 			$result = $aop->Execute($request);
 		}
-        
+
 		//打开后，将报文写入log文件
 		$this->writeLog("response: ".var_export($result,true));
 		return $result;
@@ -135,7 +136,7 @@ class AlipayTradeService {
 		var_dump($response);
 		return $response;
 	}
-	
+
 	/**
 	 * alipay.trade.refund (统一收单交易退款接口)
 	 * @param $builder 业务参数，使用buildmodel中的对象生成。
@@ -147,7 +148,7 @@ class AlipayTradeService {
 		$this->writeLog($biz_content);
 		$request = new AlipayTradeRefundRequest();
 		$request->setBizContent ( $biz_content );
-	
+
 		// 首先调用支付api
 		$response = $this->aopclientRequestExecute ($request);
 		$response = $response->alipay_trade_refund_response;
@@ -166,14 +167,14 @@ class AlipayTradeService {
 		$this->writeLog($biz_content);
 		$request = new AlipayTradeCloseRequest();
 		$request->setBizContent ( $biz_content );
-	
+
 		// 首先调用支付api
 		$response = $this->aopclientRequestExecute ($request);
 		$response = $response->alipay_trade_close_response;
 		var_dump($response);
 		return $response;
 	}
-	
+
 	/**
 	 * 退款查询   alipay.trade.fastpay.refund.query (统一收单交易退款查询)
 	 * @param $builder 业务参数，使用buildmodel中的对象生成。
@@ -185,7 +186,7 @@ class AlipayTradeService {
 		$this->writeLog($biz_content);
 		$request = new AlipayTradeFastpayRefundQueryRequest();
 		$request->setBizContent ( $biz_content );
-	
+
 		// 首先调用支付api
 		$response = $this->aopclientRequestExecute ($request);
 		var_dump($response);
@@ -202,7 +203,7 @@ class AlipayTradeService {
 		$this->writeLog($biz_content);
 		$request = new alipaydatadataservicebilldownloadurlqueryRequest();
 		$request->setBizContent ( $biz_content );
-	
+
 		// 首先调用支付api
 		$response = $this->aopclientRequestExecute ($request);
 		$response = $response->alipay_data_dataservice_bill_downloadurl_query_response;
@@ -211,7 +212,7 @@ class AlipayTradeService {
 	}
 
 	/**
-	 * 验签方法
+	 * 验签方法//
 	 * @param $arr 验签支付宝返回的信息，使用支付宝公钥。
 	 * @return boolean
 	 */
@@ -221,14 +222,14 @@ class AlipayTradeService {
 		$result = $aop->rsaCheckV1($arr, $this->alipay_public_key, $this->signtype);
 		return $result;
 	}
-	
+
 	//请确保项目文件有可写权限，不然打印不了日志。
 	function writeLog($text) {
 		// $text=iconv("GBK", "UTF-8//IGNORE", $text);
 		//$text = characet ( $text );
 		file_put_contents ( dirname ( __FILE__ ).DIRECTORY_SEPARATOR."./../../log.txt", date ( "Y-m-d H:i:s" ) . "  " . $text . "\r\n", FILE_APPEND );
 	}
-	
+
 
 	/** *利用google api生成二维码图片
 	 * $content：二维码内容参数
@@ -241,6 +242,8 @@ class AlipayTradeService {
 		$image = '<img src="http://chart.apis.google.com/chart?chs='.$size.'x'.$size.'&amp;cht=qr&chld='.$lev.'|'.$margin.'&amp;chl='.$content.'"  widht="'.$size.'" height="'.$size.'" />';
 		return $image;
 	}
+
+
 }
 
 ?>

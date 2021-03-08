@@ -107,7 +107,6 @@ layui.use('table', function(){
             title:'查看详情',
             area:['90%','90%'],
             content:'/admin/user.user/details?id='+id,
-
         })
     });
 
