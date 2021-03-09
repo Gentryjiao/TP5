@@ -19,6 +19,58 @@ use app\admin\model\ImageType as ImageTypeModel;
  */
 class Image extends Controller
 {
+    //oss上传
+    public function upload_oss(){
+        include EXTEND_PATH."aliyun-oss-php-sdk/autoload.php";
+        include EXTEND_PATH."aliyun-oss-php-sdk/src/OSS/OssClient.php";
+        include EXTEND_PATH."aliyun-oss-php-sdk/src/OSS/Core/OssException.php";
+
+
+        if (is_file(__DIR__ . '/../autoload.php')) {
+            require_once __DIR__ . '/../autoload.php';
+        }
+        if (is_file(__DIR__ . '/../vendor/autoload.php')) {
+            require_once __DIR__ . '/../vendor/autoload.php';
+        }
+
+        if($this->request->file('file')){
+            $file = $this->request->file('file');
+            $www= $_FILES['file'];
+        }else{
+            $res['code']=1;
+            $res['msg']='没有上传文件';
+            return json($res);
+        }
+
+        // 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录 https://ram.console.aliyun.com 创建RAM账号。
+        $accessKeyId = "LTAI4GDKgbzQC6qECDdAsAuc";
+        $accessKeySecret = "kdOE2shmnXrRlbe3ck5cMHHBQI5ckh";
+        // ECS 的经典网络访问（内网）
+        $endpoint = "oss-cn-beijing-internal.aliyuncs.com";
+        // 外网访问
+        $waiwang = "http://meihuaquan.oss-cn-beijing.aliyuncs.com/images/";
+        // 存储空间名称
+        $bucket= "meihuaquan";
+
+        $ext = substr($www['name'],strrpos($www['name'],'.')+1); // 上传文件后缀
+        $dst = 'images/'.time().rand(00,99).'.'.$ext;
+        //获取对象
+        $auth = new \OssClient($accessKeyId,$accessKeySecret,$endpoint);
+
+        try {
+            $auth->setTimeout(5000);
+            // 设置建立连接的超时时间，单位秒，默认10秒。
+            $auth->setConnectTimeout(600);
+            //上传图片
+            $result  = $auth->uploadFile($bucket,$dst,$www['tmp_name']);
+            $res['msg'] = '上传成功!';
+            $res['path']=$waiwang.basename($result['info']['url']);
+            return json($res);
+        } catch (OssException $e) {
+            return $this->error($e->getMessage());
+        }
+    }
+
     public function index(Request $re,$imgtype=1)
     {
         $this->assign('imgtype',$imgtype); //2多图
