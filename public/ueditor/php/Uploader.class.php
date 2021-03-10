@@ -67,6 +67,78 @@ class Uploader
     }
 
     /**
+     * OSS上传文件的主处理方法
+     * @return mixed
+     */
+    private function upFile_OSS()
+    {
+
+        $file = $this->file = $_FILES[$this->fileField];
+        if (!$file) {
+            $this->stateInfo = $this->getStateInfo("ERROR_FILE_NOT_FOUND");
+            return;
+        }
+        if ($this->file['error']) {
+            $this->stateInfo = $this->getStateInfo($file['error']);
+            return;
+        } else if (!file_exists($file['tmp_name'])) {
+            $this->stateInfo = $this->getStateInfo("ERROR_TMP_FILE_NOT_FOUND");
+            return;
+        } else if (!is_uploaded_file($file['tmp_name'])) {
+            $this->stateInfo = $this->getStateInfo("ERROR_TMPFILE");
+            return;
+        };
+
+        $this->oriName = $file['name'];
+        $this->fileSize = $file['size'];
+        $this->fileType = $this->getFileExt();
+        // $this->fullName = $this->getFullName();
+        $this->filePath = $this->getFilePath();
+        $this->fileName = $this->getFileName();
+        $dirname = dirname($this->filePath);
+
+        //检查文件大小是否超出限制
+        if (!$this->checkSize()) {
+            $this->stateInfo = $this->getStateInfo("ERROR_SIZE_EXCEED");
+            return;
+        }
+
+        //检查是否不允许的文件格式
+        if (!$this->checkType()) {
+            $this->stateInfo = $this->getStateInfo("ERROR_TYPE_NOT_ALLOWED");
+            return;
+        }
+
+        // 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录 https://ram.console.aliyun.com 创建RAM账号。
+        $accessKeyId = "xxxxx";
+        $accessKeySecret = "xxxxxxxxxxxxx";
+        // ECS 的经典网络访问（内网）
+        $endpoint = "oss-cn-beijing-internal.aliyuncs.com";
+        $date=date('Y-m-d',time());
+        // 外网访问
+        $waiwang = "http://meihuaquan.oss-cn-beijing.aliyuncs.com/test/".$date."/";
+        // 存储空间名称
+        $bucket= "meihuaquan";
+        $ext = substr($file['name'],strrpos($file['name'],'.')+1); // 上传文件后缀
+        $dst = 'test/'.$date.'/'.time().rand(00,99).'.'.$ext;
+        $auth=new OssClient($accessKeyId,$accessKeySecret,$endpoint);
+
+        try {
+            //执行阿里云上传
+            $result = $auth->uploadFile($bucket,$dst,$file['tmp_name']);
+            //赋给图片路径（原代码）
+            $this->fullName =$waiwang.basename($result['info']['url']);
+            //ossimgurl这是自定义属性，避免以ueditor方式获得图片地址
+            $this->stateInfo = $this->stateMap[0];
+        } catch (OssException $e) {
+            //$this->stateInfo = $this->getStateInfo("ERROR_FILE_MOVE");
+            //将错误信息修改为阿里云上传失败的错误信息
+            $this->stateInfo = $e->getMessage();
+        }
+
+    }
+
+    /**
      * 上传文件的主处理方法
      * @return mixed
      */

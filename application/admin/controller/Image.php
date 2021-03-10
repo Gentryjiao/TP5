@@ -12,6 +12,10 @@ use service\UploadService as Upload;
 use think\Url;
 use app\admin\model\Image as ImageModel;
 use app\admin\model\ImageType as ImageTypeModel;
+
+//阿里云Oss
+use OSS\OssClient;
+use OSS\Core\OssException;
 /**
  * 登录验证控制器
  * Class Login
@@ -22,16 +26,7 @@ class Image extends Controller
     //oss上传
     public function upload_oss(){
         include EXTEND_PATH."aliyun-oss-php-sdk/autoload.php";
-        include EXTEND_PATH."aliyun-oss-php-sdk/src/OSS/OssClient.php";
-        include EXTEND_PATH."aliyun-oss-php-sdk/src/OSS/Core/OssException.php";
 
-
-        if (is_file(__DIR__ . '/../autoload.php')) {
-            require_once __DIR__ . '/../autoload.php';
-        }
-        if (is_file(__DIR__ . '/../vendor/autoload.php')) {
-            require_once __DIR__ . '/../vendor/autoload.php';
-        }
 
         if($this->request->file('file')){
             $file = $this->request->file('file');
@@ -47,15 +42,16 @@ class Image extends Controller
         $accessKeySecret = "kdOE2shmnXrRlbe3ck5cMHHBQI5ckh";
         // ECS 的经典网络访问（内网）
         $endpoint = "oss-cn-beijing-internal.aliyuncs.com";
+        $date=date('Y-m-d',time());
         // 外网访问
-        $waiwang = "http://meihuaquan.oss-cn-beijing.aliyuncs.com/images/";
+        $waiwang = "http://meihuaquan.oss-cn-beijing.aliyuncs.com/images/".$date."/";
         // 存储空间名称
         $bucket= "meihuaquan";
 
         $ext = substr($www['name'],strrpos($www['name'],'.')+1); // 上传文件后缀
-        $dst = 'images/'.time().rand(00,99).'.'.$ext;
+        $dst = 'images/'.$date.'/'.time().rand(00,99).'.'.$ext;
         //获取对象
-        $auth = new \OssClient($accessKeyId,$accessKeySecret,$endpoint);
+        $auth = new OssClient($accessKeyId,$accessKeySecret,$endpoint);
 
         try {
             $auth->setTimeout(5000);
