@@ -27,7 +27,6 @@ class Image extends Controller
     public function upload_oss(){
         include EXTEND_PATH."aliyun-oss-php-sdk/autoload.php";
 
-
         if($this->request->file('file')){
             $file = $this->request->file('file');
             $www= $_FILES['file'];
@@ -50,6 +49,48 @@ class Image extends Controller
 
         $ext = substr($www['name'],strrpos($www['name'],'.')+1); // 上传文件后缀
         $dst = 'images/'.$date.'/'.time().rand(00,99).'.'.$ext;
+        //获取对象
+        $auth = new OssClient($accessKeyId,$accessKeySecret,$endpoint);
+
+        try {
+            $auth->setTimeout(5000);
+            // 设置建立连接的超时时间，单位秒，默认10秒。
+            $auth->setConnectTimeout(600);
+            //上传图片
+            $result  = $auth->uploadFile($bucket,$dst,$www['tmp_name']);
+            $res['msg'] = '上传成功!';
+            $res['path']=$waiwang.basename($result['info']['url']);
+            return json($res);
+        } catch (OssException $e) {
+            return $this->error($e->getMessage());
+        }
+    }
+
+    //oss上传
+    public function upload_video(){
+        include EXTEND_PATH."aliyun-oss-php-sdk/autoload.php";
+
+        if($this->request->file('file')){
+            $file = $this->request->file('file');
+            $www= $_FILES['file'];
+        }else{
+            $res['code']=1;
+            $res['msg']='没有上传文件';
+            return json($res);
+        }
+        // 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录 https://ram.console.aliyun.com 创建RAM账号。
+        $accessKeyId = "LTAI4GDKgbzQC6qECDdAsAuc";
+        $accessKeySecret = "kdOE2shmnXrRlbe3ck5cMHHBQI5ckh";
+        // ECS 的经典网络访问（内网）
+        $endpoint = "oss-cn-beijing-internal.aliyuncs.com";
+        $date=date('Y-m-d',time());
+        // 外网访问
+        $waiwang = "http://meihuaquan.oss-cn-beijing.aliyuncs.com/video/".$date."/";
+        // 存储空间名称
+        $bucket= "meihuaquan";
+
+        $ext = substr($www['name'],strrpos($www['name'],'.')+1); // 上传文件后缀
+        $dst = 'video/'.$date.'/'.time().rand(00,99).'.'.$ext;
         //获取对象
         $auth = new OssClient($accessKeyId,$accessKeySecret,$endpoint);
 
