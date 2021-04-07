@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 06/03/2021 22:23:03
+ Date: 07/04/2021 12:54:02
 */
 
 SET NAMES utf8mb4;
@@ -115,7 +115,7 @@ CREATE TABLE `eb_store_product_attr`  (
   `is_on` tinyint(4) NOT NULL DEFAULT 0 COMMENT '默认显示',
   `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 729 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 728 CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of eb_store_product_attr
@@ -208,7 +208,7 @@ CREATE TABLE `eb_system_admin`  (
 -- ----------------------------
 -- Records of eb_system_admin
 -- ----------------------------
-INSERT INTO `eb_system_admin` VALUES (6, 'admin', 'e10adc3949ba59abbe56e057f20f883e', 'admin', '1', '127.0.0.1', 1615039849, 1572925235, 0, 0, 1, 0);
+INSERT INTO `eb_system_admin` VALUES (6, 'admin', 'e10adc3949ba59abbe56e057f20f883e', 'admin', '1', '127.0.0.1', 1617766861, 1572925235, 0, 0, 1, 0);
 INSERT INTO `eb_system_admin` VALUES (7, 'superk315', '7588a36ab09db5678988b2d6036a2af0', '孔繁林', '2', '106.116.98.213', 1604493566, 1603276405, 0, 1, 1, 0);
 INSERT INTO `eb_system_admin` VALUES (8, 'xuejie', 'e10adc3949ba59abbe56e057f20f883e', '薛洁', '2', '221.199.16.60', 1604629019, 1603276785, 0, 1, 1, 0);
 
@@ -253,7 +253,7 @@ CREATE TABLE `eb_system_log`  (
   INDEX `admin_id`(`admin_id`) USING BTREE,
   INDEX `add_time`(`add_time`) USING BTREE,
   INDEX `type`(`type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6807 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员操作记录表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 6918 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '管理员操作记录表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of eb_system_log
@@ -7073,6 +7073,108 @@ INSERT INTO `eb_system_log` VALUES (6812, 6, 'admin', 'admin/user.user/details/'
 INSERT INTO `eb_system_log` VALUES (6813, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615040189, 0);
 INSERT INTO `eb_system_log` VALUES (6814, 6, 'admin', 'admin/user.user/details/', '未知', 'GET', '127.0.0.1', 'system', 1615040192, 0);
 INSERT INTO `eb_system_log` VALUES (6815, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615040193, 0);
+INSERT INTO `eb_system_log` VALUES (6816, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1615041887, 0);
+INSERT INTO `eb_system_log` VALUES (6817, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1615041888, 0);
+INSERT INTO `eb_system_log` VALUES (6818, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615041888, 0);
+INSERT INTO `eb_system_log` VALUES (6819, 6, 'admin', 'admin/user.user/details/', '未知', 'GET', '127.0.0.1', 'system', 1615041889, 0);
+INSERT INTO `eb_system_log` VALUES (6820, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615041890, 0);
+INSERT INTO `eb_system_log` VALUES (6821, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1615041922, 0);
+INSERT INTO `eb_system_log` VALUES (6822, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1615041923, 0);
+INSERT INTO `eb_system_log` VALUES (6823, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615041924, 0);
+INSERT INTO `eb_system_log` VALUES (6824, 6, 'admin', 'admin/user.user/details/', '未知', 'GET', '127.0.0.1', 'system', 1615041925, 0);
+INSERT INTO `eb_system_log` VALUES (6825, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615041929, 0);
+INSERT INTO `eb_system_log` VALUES (6826, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1615041971, 0);
+INSERT INTO `eb_system_log` VALUES (6827, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1615041972, 0);
+INSERT INTO `eb_system_log` VALUES (6828, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615041972, 0);
+INSERT INTO `eb_system_log` VALUES (6829, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1615041974, 0);
+INSERT INTO `eb_system_log` VALUES (6830, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1615041974, 0);
+INSERT INTO `eb_system_log` VALUES (6831, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615041975, 0);
+INSERT INTO `eb_system_log` VALUES (6832, 6, 'admin', 'admin/user.user/details/', '未知', 'GET', '127.0.0.1', 'system', 1615041975, 0);
+INSERT INTO `eb_system_log` VALUES (6833, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615041976, 0);
+INSERT INTO `eb_system_log` VALUES (6834, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1615042000, 0);
+INSERT INTO `eb_system_log` VALUES (6835, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1615042001, 0);
+INSERT INTO `eb_system_log` VALUES (6836, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615042001, 0);
+INSERT INTO `eb_system_log` VALUES (6837, 6, 'admin', 'admin/user.user/details/', '未知', 'GET', '127.0.0.1', 'system', 1615042002, 0);
+INSERT INTO `eb_system_log` VALUES (6838, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615042002, 0);
+INSERT INTO `eb_system_log` VALUES (6839, 6, 'admin', 'admin/user.user/empty/', '未知', 'GET', '127.0.0.1', 'system', 1615042002, 0);
+INSERT INTO `eb_system_log` VALUES (6840, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1615042031, 0);
+INSERT INTO `eb_system_log` VALUES (6841, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1615042031, 0);
+INSERT INTO `eb_system_log` VALUES (6842, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615042031, 0);
+INSERT INTO `eb_system_log` VALUES (6843, 6, 'admin', 'admin/user.user/details/', '未知', 'GET', '127.0.0.1', 'system', 1615042032, 0);
+INSERT INTO `eb_system_log` VALUES (6844, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615042032, 0);
+INSERT INTO `eb_system_log` VALUES (6845, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1615042045, 0);
+INSERT INTO `eb_system_log` VALUES (6846, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1615042045, 0);
+INSERT INTO `eb_system_log` VALUES (6847, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615042045, 0);
+INSERT INTO `eb_system_log` VALUES (6848, 6, 'admin', 'admin/user.user/details/', '未知', 'GET', '127.0.0.1', 'system', 1615042046, 0);
+INSERT INTO `eb_system_log` VALUES (6849, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615042046, 0);
+INSERT INTO `eb_system_log` VALUES (6850, 6, 'admin', 'admin/user.user/empty/', '未知', 'GET', '127.0.0.1', 'system', 1615042047, 0);
+INSERT INTO `eb_system_log` VALUES (6851, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1615042143, 0);
+INSERT INTO `eb_system_log` VALUES (6852, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1615042144, 0);
+INSERT INTO `eb_system_log` VALUES (6853, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615042145, 0);
+INSERT INTO `eb_system_log` VALUES (6854, 6, 'admin', 'admin/user.user/details/', '未知', 'GET', '127.0.0.1', 'system', 1615042145, 0);
+INSERT INTO `eb_system_log` VALUES (6855, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615042146, 0);
+INSERT INTO `eb_system_log` VALUES (6856, 6, 'admin', 'admin/user.user/empty/', '未知', 'GET', '127.0.0.1', 'system', 1615042146, 0);
+INSERT INTO `eb_system_log` VALUES (6857, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1615042673, 0);
+INSERT INTO `eb_system_log` VALUES (6858, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1615042673, 0);
+INSERT INTO `eb_system_log` VALUES (6859, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615042673, 0);
+INSERT INTO `eb_system_log` VALUES (6860, 6, 'admin', 'admin/user.user/details/', '未知', 'GET', '127.0.0.1', 'system', 1615042674, 0);
+INSERT INTO `eb_system_log` VALUES (6861, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615042675, 0);
+INSERT INTO `eb_system_log` VALUES (6862, 6, 'admin', 'admin/user.user/empty/', '未知', 'GET', '127.0.0.1', 'system', 1615042676, 0);
+INSERT INTO `eb_system_log` VALUES (6863, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1615042703, 0);
+INSERT INTO `eb_system_log` VALUES (6864, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1615042704, 0);
+INSERT INTO `eb_system_log` VALUES (6865, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615042704, 0);
+INSERT INTO `eb_system_log` VALUES (6866, 6, 'admin', 'admin/user.user/details/', '未知', 'GET', '127.0.0.1', 'system', 1615042705, 0);
+INSERT INTO `eb_system_log` VALUES (6867, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615042705, 0);
+INSERT INTO `eb_system_log` VALUES (6868, 6, 'admin', 'admin/user.user/empty/', '未知', 'GET', '127.0.0.1', 'system', 1615042706, 0);
+INSERT INTO `eb_system_log` VALUES (6869, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1615537611, 0);
+INSERT INTO `eb_system_log` VALUES (6870, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1615537612, 0);
+INSERT INTO `eb_system_log` VALUES (6871, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615537612, 0);
+INSERT INTO `eb_system_log` VALUES (6872, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1615537615, 0);
+INSERT INTO `eb_system_log` VALUES (6873, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1615537617, 0);
+INSERT INTO `eb_system_log` VALUES (6874, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1615537617, 0);
+INSERT INTO `eb_system_log` VALUES (6875, 6, 'admin', 'admin/setting.systemmenus/index/', '权限规则', 'GET', '127.0.0.1', 'system', 1616418299, 0);
+INSERT INTO `eb_system_log` VALUES (6876, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1616418301, 0);
+INSERT INTO `eb_system_log` VALUES (6877, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1616418302, 0);
+INSERT INTO `eb_system_log` VALUES (6878, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1616418302, 0);
+INSERT INTO `eb_system_log` VALUES (6879, 6, 'admin', 'admin/setting.systemrole/index/', '身份管理', 'GET', '127.0.0.1', 'system', 1616418305, 0);
+INSERT INTO `eb_system_log` VALUES (6880, 6, 'admin', 'admin/setting.systemadmin/index/', '管理员列表', 'GET', '127.0.0.1', 'system', 1616418308, 0);
+INSERT INTO `eb_system_log` VALUES (6881, 6, 'admin', 'admin/setting.systemmenus/create/', '未知', 'GET', '127.0.0.1', 'system', 1616418310, 0);
+INSERT INTO `eb_system_log` VALUES (6882, 6, 'admin', 'admin/widget.widgets/icon/fodder/icon', '未知', 'GET', '127.0.0.1', 'system', 1616418347, 0);
+INSERT INTO `eb_system_log` VALUES (6883, 6, 'admin', 'admin/setting.systemmenus/save/', '未知', 'POST', '127.0.0.1', 'system', 1616418359, 0);
+INSERT INTO `eb_system_log` VALUES (6884, 6, 'admin', 'admin/setting.systemmenus/index/', '权限规则', 'GET', '127.0.0.1', 'system', 1616418360, 0);
+INSERT INTO `eb_system_log` VALUES (6885, 6, 'admin', 'admin/setting.systemmenus/edit/id/316', '未知', 'GET', '127.0.0.1', 'system', 1616418366, 0);
+INSERT INTO `eb_system_log` VALUES (6886, 6, 'admin', 'admin/setting.systemmenus/update/id/316', '未知', 'POST', '127.0.0.1', 'system', 1616418370, 0);
+INSERT INTO `eb_system_log` VALUES (6887, 6, 'admin', 'admin/setting.systemmenus/index/', '权限规则', 'GET', '127.0.0.1', 'system', 1616418370, 0);
+INSERT INTO `eb_system_log` VALUES (6888, 6, 'admin', 'admin/setting.systemmenus/index/pid/316', '权限规则', 'GET', '127.0.0.1', 'system', 1616418372, 0);
+INSERT INTO `eb_system_log` VALUES (6889, 6, 'admin', 'admin/setting.systemmenus/create/cid/316', '未知', 'GET', '127.0.0.1', 'system', 1616418374, 0);
+INSERT INTO `eb_system_log` VALUES (6890, 6, 'admin', 'admin/setting.systemmenus/save/', '未知', 'POST', '127.0.0.1', 'system', 1616418408, 0);
+INSERT INTO `eb_system_log` VALUES (6891, 6, 'admin', 'admin/setting.systemmenus/index/pid/316', '权限规则', 'GET', '127.0.0.1', 'system', 1616418410, 0);
+INSERT INTO `eb_system_log` VALUES (6892, 6, 'admin', 'admin/upload.video/index/', '未知', 'GET', '127.0.0.1', 'system', 1616418414, 0);
+INSERT INTO `eb_system_log` VALUES (6893, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1616422193, 0);
+INSERT INTO `eb_system_log` VALUES (6894, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1616422194, 0);
+INSERT INTO `eb_system_log` VALUES (6895, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1616422194, 0);
+INSERT INTO `eb_system_log` VALUES (6896, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1616427486, 0);
+INSERT INTO `eb_system_log` VALUES (6897, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1616427487, 0);
+INSERT INTO `eb_system_log` VALUES (6898, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1616427488, 0);
+INSERT INTO `eb_system_log` VALUES (6899, 6, 'admin', 'admin/setting.systemrole/index/', '身份管理', 'GET', '127.0.0.1', 'system', 1616427649, 0);
+INSERT INTO `eb_system_log` VALUES (6900, 6, 'admin', 'admin/setting.systemadmin/index/', '管理员列表', 'GET', '127.0.0.1', 'system', 1616427653, 0);
+INSERT INTO `eb_system_log` VALUES (6901, 6, 'admin', 'admin/setting.systemmenus/index/', '权限规则', 'GET', '127.0.0.1', 'system', 1616427663, 0);
+INSERT INTO `eb_system_log` VALUES (6902, 6, 'admin', 'admin/setting.systemmenus/create/', '未知', 'GET', '127.0.0.1', 'system', 1616427669, 0);
+INSERT INTO `eb_system_log` VALUES (6903, 6, 'admin', 'admin/widget.widgets/icon/fodder/icon', '未知', 'GET', '127.0.0.1', 'system', 1616427706, 0);
+INSERT INTO `eb_system_log` VALUES (6904, 6, 'admin', 'admin/setting.systemmenus/save/', '未知', 'POST', '127.0.0.1', 'system', 1616427720, 0);
+INSERT INTO `eb_system_log` VALUES (6905, 6, 'admin', 'admin/setting.systemmenus/index/', '权限规则', 'GET', '127.0.0.1', 'system', 1616427721, 0);
+INSERT INTO `eb_system_log` VALUES (6906, 6, 'admin', 'admin/setting.systemmenus/index/pid/318', '权限规则', 'GET', '127.0.0.1', 'system', 1616427754, 0);
+INSERT INTO `eb_system_log` VALUES (6907, 6, 'admin', 'admin/setting.systemmenus/create/cid/318', '未知', 'GET', '127.0.0.1', 'system', 1616427757, 0);
+INSERT INTO `eb_system_log` VALUES (6908, 6, 'admin', 'admin/setting.systemmenus/save/', '未知', 'POST', '127.0.0.1', 'system', 1616427788, 0);
+INSERT INTO `eb_system_log` VALUES (6909, 6, 'admin', 'admin/setting.systemmenus/index/pid/318', '权限规则', 'GET', '127.0.0.1', 'system', 1616427789, 0);
+INSERT INTO `eb_system_log` VALUES (6910, 6, 'admin', 'admin/setting.systemmenus/create/cid/318', '未知', 'GET', '127.0.0.1', 'system', 1616427792, 0);
+INSERT INTO `eb_system_log` VALUES (6911, 6, 'admin', 'admin/setting.systemmenus/save/', '未知', 'POST', '127.0.0.1', 'system', 1616427816, 0);
+INSERT INTO `eb_system_log` VALUES (6912, 6, 'admin', 'admin/setting.systemmenus/index/pid/318', '权限规则', 'GET', '127.0.0.1', 'system', 1616427817, 0);
+INSERT INTO `eb_system_log` VALUES (6913, 6, 'admin', 'admin/message.add/index/', '未知', 'GET', '127.0.0.1', 'system', 1616427822, 0);
+INSERT INTO `eb_system_log` VALUES (6914, 6, 'admin', 'admin/message.sort/index/', '未知', 'GET', '127.0.0.1', 'system', 1617766865, 0);
+INSERT INTO `eb_system_log` VALUES (6915, 6, 'admin', 'admin/user.user/index/', '用户列表', 'GET', '127.0.0.1', 'system', 1617766895, 0);
+INSERT INTO `eb_system_log` VALUES (6916, 6, 'admin', 'admin/user.user/getlist/', '未知', 'POST', '127.0.0.1', 'system', 1617766895, 0);
+INSERT INTO `eb_system_log` VALUES (6917, 6, 'admin', 'admin/user.user/123/', '未知', 'GET', '127.0.0.1', 'system', 1617766896, 0);
 
 -- ----------------------------
 -- Table structure for eb_system_menus
@@ -7094,7 +7196,7 @@ CREATE TABLE `eb_system_menus`  (
   INDEX `pid`(`pid`) USING BTREE,
   INDEX `is_show`(`is_show`) USING BTREE,
   INDEX `access`(`access`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 316 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 321 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of eb_system_menus
@@ -7114,6 +7216,11 @@ INSERT INTO `eb_system_menus` VALUES (305, 304, '', '支付宝', 'admin', 'pay.a
 INSERT INTO `eb_system_menus` VALUES (306, 304, '', '微信', 'admin', 'pay.wxpay', 'index', '[]', 0, 1, 1);
 INSERT INTO `eb_system_menus` VALUES (311, 304, '', '短信（注册）', 'admin', 'pay.alisms', '', '[]', 0, 1, 1);
 INSERT INTO `eb_system_menus` VALUES (313, 304, '', '短信（找回密码）', 'admin', 'pay.alisms	', 'index1', '[]', 0, 1, 1);
+INSERT INTO `eb_system_menus` VALUES (316, 0, 'cloud-upload', '文件上传', 'admin', 'upload', '', '[]', 0, 1, 1);
+INSERT INTO `eb_system_menus` VALUES (317, 316, '', '视频上传', 'admin', 'upload.video', '', '[]', 0, 1, 1);
+INSERT INTO `eb_system_menus` VALUES (318, 0, 'comment', '信息管理', 'admin', 'message', '', '[]', 0, 1, 1);
+INSERT INTO `eb_system_menus` VALUES (319, 318, '', '信息分类', 'admin', 'message.sort', '', '[]', 0, 1, 1);
+INSERT INTO `eb_system_menus` VALUES (320, 318, '', '信息添加', 'admin', 'message.add', '', '[]', 0, 1, 1);
 
 -- ----------------------------
 -- Table structure for eb_system_role
