@@ -35,6 +35,23 @@ function sensitive_words_filter($str)
     return '';
 }
 
+/**
+ * @param string $text 翻译原文
+ * @param string $source 源语言
+ * @param string $target 目标语言
+ * @return string
+ */
+function api($text = '', $source = 'zh-CN', $target = 'en')
+{
+    require_once ROOT_PATH . 'vendor/googleTranslate/GoogleTranslate.php';
+    $trans = new \GoogleTranslate();
+    if (!$text) {
+        $text = 'GoogleTranslate';
+    }
+    $result = $trans->translate($source, $target, $text, $type = 'cn');
+    return $result;
+}
+
 /*
  * 判断手机或者pc
  * return true/phone false/pc
@@ -102,27 +119,28 @@ function filterEmoji($str)
 }
 
 //可逆加密
-// function encrypt($data, $key) {
-//     $prep_code = serialize($data);
-//     $block = mcrypt_get_block_size('des', 'ecb');
-//     if (($pad = $block - (strlen($prep_code) % $block)) < $block) {
-//         $prep_code .= str_repeat(chr($pad), $pad);
-//     }
-//     $encrypt = mcrypt_encrypt(MCRYPT_DES, $key, $prep_code, MCRYPT_MODE_ECB);
-//     return base64_encode($encrypt);
-// }
+ function encrypt($data, $key) {
+     $prep_code = serialize($data);
+     $block = mcrypt_get_block_size('des', 'ecb');
+     if (($pad = $block - (strlen($prep_code) % $block)) < $block) {
+         $prep_code .= str_repeat(chr($pad), $pad);
+     }
+     $encrypt = mcrypt_encrypt(MCRYPT_DES, $key, $prep_code, MCRYPT_MODE_ECB);
+     return base64_encode($encrypt);
+ }
 
 //可逆解密
-// function decrypt($str, $key) {
-//     $str = base64_decode($str);
-//     $str = mcrypt_decrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB);
-//     $block = mcrypt_get_block_size('des', 'ecb');
-//     $pad = ord($str[($len = strlen($str)) - 1]);
-//     if ($pad && $pad < $block && preg_match('/' . chr($pad) . '{' . $pad . '}$/', $str)) {
-//         $str = substr($str, 0, strlen($str) - $pad);
-//     }
-//     return unserialize($str);
-// }
+ function decrypt($str, $key) {
+     $str = base64_decode($str);
+     $str = mcrypt_decrypt(MCRYPT_DES, $key, $str, MCRYPT_MODE_ECB);
+     $block = mcrypt_get_block_size('des', 'ecb');
+     $pad = ord($str[($len = strlen($str)) - 1]);
+     if ($pad && $pad < $block && preg_match('/' . chr($pad) . '{' . $pad . '}$/', $str)) {
+         $str = substr($str, 0, strlen($str) - $pad);
+     }
+     return unserialize($str);
+ }
+
 //替换一部分字符
 /**
  * @param $string 需要替换的字符串
