@@ -41,10 +41,10 @@ class Email extends Controller
         $mail->SetFrom($config['username'], 'qq');    // 设置发件人地址和名称
         $mail->AddReplyTo($to,$config['username']);
         // 设置邮件回复人地址和名称
-        $mail->Subject    = 'ceshi';                     // 设置邮件标题
+        $mail->Subject    = $subject;                     // 设置邮件标题
         $mail->AltBody    = "为了查看该邮件，请切换到支持 HTML 的邮件客户端";
         // 可选项，向下兼容考虑
-        $mail->MsgHTML('<html>helo</html>');                         // 设置邮件内容
+        $mail->MsgHTML($content);                         // 设置邮件内容
         $mail->AddAddress($to);
         //$mail->AddAttachment("images/phpmailer.gif"); // 附件
         if(!$mail->Send()) {
