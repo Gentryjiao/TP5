@@ -251,3 +251,59 @@ function define_str_replace($data)
     return str_replace(' ','+',$data);
 }
 
+// 添加域名
+function addavatarUrl($data)
+{
+    if (substr($data, 0, 4) != 'http') {
+        $data = $_SERVER['REQUEST_SCHEME']."://".$_SERVER['SERVER_NAME'].$data;
+    }
+    return $data;
+}
+
+// 获取 随机浮点
+function randomFloat($min = 0, $max = 1, $num = 2) {
+    $number = $min + mt_rand() / mt_getrandmax() * ($max - $min);
+    return round($number, $num);
+}
+
+/**
+ * 替换手机号码中间四位数字
+ * @param  [type] $str [description]
+ * @return [type]      [description]
+ */
+function hide_phone($str){
+    $resstr = substr_replace($str,'****',3,4);
+    return $resstr;
+}
+
+/**
+ * 生成二维码
+ * @param  string $content 二维码内容
+ * @return string          二维码保存路径
+ */
+function userimg($content){
+
+    //引入phpqrcode类库文件
+    vendor('phpqrcode.phpqrcode');
+    $value = $content;         //二维码内容
+    $errorCorrectionLevel = 'L';  //容错级别
+    $matrixPointSize = 8;      //生成图片大小
+
+    // 判断是否有这个文件夹  没有的话就创建一个
+    if(!is_dir("qrcode")){
+        // 创建文件加
+        mkdir("qrcode");
+    }
+
+    // 设置二维码图片名称，以及存放的路径
+    $filename = 'qrcode/'.time().rand(10000,9999999).'.png';
+
+    // 使用类库生成二维码
+    QRcode::png($value,$filename , $errorCorrectionLevel, $matrixPointSize, 2);
+
+    // 　//如果需要转换成base64数据，解开下面这行注释即可
+    // 　$image_data = chunk_split(base64_encode(fread(fopen($filename, 'r'), filesize($filename))));
+    return $filename;
+}
+
+

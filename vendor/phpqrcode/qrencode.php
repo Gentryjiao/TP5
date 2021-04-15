@@ -73,13 +73,12 @@
             $this->eccLength = QRspec::rsEccLength($spec);
             $this->ecccode = array_fill(0, $this->eccLength, 0);
             $this->blocks = QRspec::rsBlockNum($spec);
-            
+
             $ret = $this->init($spec);
             if($ret < 0) {
                 throw new Exception('block alloc error');
                 return null;
             }
-
             $this->count = 0;
         }
         
