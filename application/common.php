@@ -434,3 +434,72 @@ function arraySort($array, $keys, $sort = SORT_DESC) {
     return $array;
 }
 
+/*
+ * 根据生日计算年龄
+ * @param $birthday 月/日/年
+ * */
+function birthday($birthday){
+    list($month,$day,$year) = explode("/",$birthday);
+    $year_diff = date("Y") - $year;
+    $month_diff = date("m") - $month;
+    $day_diff  = date("d") - $day;
+    if ($day_diff < 0 || $month_diff < 0)
+        $year_diff--;
+    return $year_diff;
+}
+
+/**
++----------------------------------------------------------
+ * 功能：计算两个日期相差 年 月 日
++----------------------------------------------------------
+ * @param  date     $date1 起始日期
+ * @param  date     $date2 截止日期日期
++----------------------------------------------------------
+ * @return array
++----------------------------------------------------------
+ */
+function DiffDate($date1, $date2) {
+    if (strtotime($date1) > strtotime($date2)) {
+        $ymd = $date2;
+        $date2 = $date1;
+        $date1 = $ymd;
+    }
+    list($m1, $d1, $y1) = explode('/', $date1);
+    list($m2, $d2, $y2) = explode('/', $date2);
+    $y = $m = $d = $_m = 0;
+    $math = ($y2 - $y1) * 12 + $m2 - $m1;
+    $y = round($math / 12);
+    $m = intval($math % 12);
+    $d = (mktime(0, 0, 0, $m2, $d2, $y2) - mktime(0, 0, 0, $m2, $d1, $y2)) / 86400;
+    if ($d < 0) {
+        $m -= 1;
+        $d += date('j', mktime(0, 0, 0, $m2, 0, $y2));
+    }
+    $m < 0 && $y -= 1;
+//    return $y;
+    return array($y, $m, $d);
+}
+
+/**
+ * 校验日期格式是否合法
+ * @param string $date
+ * @param array $formats
+ * @return bool
+ */
+function isDateValid($date, $formats = array('Y-m-d', 'Y/m/d')) {
+
+    $unixTime = strtotime($date);
+    if(!$unixTime) { //无法用strtotime转换，说明日期格式非法
+        return false;
+    }
+
+    //校验日期合法性，只要满足其中一个格式就可以
+    foreach ($formats as $format) {
+        if(date($format, $unixTime) == $date) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
