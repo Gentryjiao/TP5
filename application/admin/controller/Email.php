@@ -7,6 +7,7 @@ use think\Db;
 use think\Loader;
 class Email extends Controller
 {
+
     /**
      * 邮件发送
      * @param  $to
@@ -15,44 +16,58 @@ class Email extends Controller
      * @throws Exception
      * @throws phpmailerException
      */
-    public static function send_email($to='1715792133@qq.com',$subject='title',$content='content'){
-        Loader::import('email.PHPMailerAutoload', EXTEND_PATH, '.php');
-        Loader::import('email.class', EXTEND_PATH, '.phpmailer.php');
-        Loader::import('email.class', EXTEND_PATH, '.smtp.php');
-        $mail  = new \PHPMailer();
-        $mail->SMTPOptions = [
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-                'allow_self_signed' => true,
-            ]
-        ];
+
+    public function send_email($to,$subject,$content)
+    {
+        header("content-type:text/html;charset=utf-8");
+        //收件人的邮箱 给谁发邮件
         $config=Db::name('smtp_config')->where('id',1)->find();
-
-        $mail->CharSet    ="UTF-8";                 //设定邮件编码，默认ISO-8859-1，如果发中文此项必须设置为 UTF-8
-        $mail->IsSMTP();                            // 设定使用SMTP服务
-        $mail->SMTPAuth   = true;                   // 启用 SMTP 验证功能
-        $mail->SMTPSecure = "ssl";                  // 启用SSL
-        $mail->SMTPDebug = 2;
-        $mail->Host       = $config['host'];       // SMTP 服务器
-        $mail->Port       = 465;                    // SMTP服务器的端口号
-        $mail->Username   = $config['username'];  // SMTP服务器用户名
-        $mail->Password   = $config['password'];        // SMTP服务器密码
-        $mail->SetFrom($config['username'], 'qq');    // 设置发件人地址和名称
-        $mail->AddReplyTo($to,$config['username']);
-        // 设置邮件回复人地址和名称
-        $mail->Subject    = $subject;                     // 设置邮件标题
-        $mail->AltBody    = "为了查看该邮件，请切换到支持 HTML 的邮件客户端";
-        // 可选项，向下兼容考虑
-        $mail->MsgHTML($content);                         // 设置邮件内容
+        vendor('PHPMailer.PHPMailer');
+        $mail = new \PHPMailer();
+        // 使用SMTP方式发送
+        $mail->IsSMTP();
+        // // 设置邮件的字符编码
+        $mail->CharSet = 'UTF-8';
+        // // 企业邮局域名
+        $mail->Host = $config['host'];
+        //---------qq邮箱需要的------//设置使用ssl加密方式登录鉴权
+        $mail->SMTPSecure = 'ssl';
+        //设置ssl连接smtp服务器的远程服务器端口号 可选465或587
+        $mail->Port = 465;//---------qq邮箱需要的------
+        // 启用SMTP验证功能
+        $mail->SMTPAuth = true;
+        //邮件发送人的用户名(请填写完整的email地址)
+        $mail->Username = $config['username'];
+        // 邮件发送人的 密码 （授权码）
+        $mail->Password = $config['password'];  //修改为自己的授权码
+        //邮件发送者email地址
+        $mail->From = $config['username'];
+        //发送邮件人的标题
+        $mail->FromName = "虎虎保险Tigerless Health";
+        //收件人地址，可以替换成任何想要接收邮件的email信箱,格式是AddAddress("收件人email","收件人姓名")
+//        $mail->AddAddress("$email_addr", substr($email_addr, 0, strpos($email_addr, '@')));
         $mail->AddAddress($to);
-        //$mail->AddAttachment("images/phpmailer.gif"); // 附件
-        if(!$mail->Send()) {
-            echo "发送失败：" . $mail->ErrorInfo;
-        } else {
-            echo "恭喜，邮件发送成功！";
-        }
+        //回复的地址
+        $mail->AddReplyTo($config['username'], "");
+        //$mail->AddAttachment("./mail.rar"); // 添加附件
+        //set email format to HTML //是否使用HTML格式
+        $mail->IsHTML(true);
+        //邮件标题
+//        $mail->Subject = 'subject of the mail';  //邮件标题
+        $mail->Subject    = $subject;                     // 设置邮件标题
+        //邮件内容
+//        $mail->Body = "<p style='color:red'>" . 'verification code:' . $code . '</p >';   //内容
+        $mail->MsgHTML($content);                         // 设置邮件内容
 
+        //附加信息，可以省略
+        $mail->AltBody = '';
+        // 添加附件,并指定名称
+        //$mail->AddAttachment('./error404.php', 'PHP file');
+        if (!$mail->Send()) {
+            return json(['code' => 0, 'msg' => 'failure notice', 'error' => $mail->ErrorInfo]); //发送失败
+        } else {
+            return json(['code' => 1, 'msg' => 'send successful']); //发送成功
+        }
     }
 
 }
