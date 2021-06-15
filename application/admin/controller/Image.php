@@ -66,6 +66,111 @@ class Image extends Controller
         }
     }
 
+    //阿里云分片上传
+    public function upload_sheet(){
+        include EXTEND_PATH."aliyun-oss-php-sdk/autoload.php";
+
+        // 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录RAM控制台创建RAM账号。
+        $accessKeyId = "LTAI5tEAE2nvKa5rQwJxBwEk";
+        $accessKeySecret = "kMTXf6zZISYhUfeiSRwPOCm7a1UGV8";
+        // ECS 的经典网络访问（内网）
+        $endpoint = "oss-cn-beijing-internal.aliyuncs.com";
+        // Endpoint以杭州为例，其它Region请按实际情况填写。
+        // $endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
+        $bucket= "zsddoss";
+
+        if($this->request->file('file')){
+            $file = $this->request->file('file');
+            $www= $_FILES['file'];
+        }else {
+            $res['code'] = 1;
+            $res['msg'] = '没有上传文件';
+            return json($res);
+        }
+        $date=date('Y-m-d',time());
+        // 外网访问
+        $waiwang = "http://zsddoss.oss-cn-beijing.aliyuncs.com/video/".$date."/";
+        $object =substr($www['name'],strrpos($www['name'],'.')+1);;
+        $uploadFile = 'video/'.$date.'/'.time().rand(00,99).'.'.$object;
+        /**
+         *  步骤1：初始化一个分片上传事件，获取uploadId。
+         */
+        try{
+            $ossClient = new OssClient($accessKeyId, $accessKeySecret, $endpoint);
+
+            //返回uploadId。uploadId是分片上传事件的唯一标识，您可以根据uploadId发起相关的操作，如取消分片上传、查询分片上传等。
+            $uploadId = $ossClient->initiateMultipartUpload($bucket, $object);
+        } catch(OssException $e) {
+            printf(__FUNCTION__ . ": initiateMultipartUpload FAILED\n");
+            printf($e->getMessage() . "\n");
+            return;
+        }
+        print(__FUNCTION__ . ": initiateMultipartUpload OK" . "\n");
+        /*
+         * 步骤2：上传分片。
+         */
+        $partSize = 10 * 1024 * 1024;
+        $uploadFileSize = filesize($uploadFile);
+        $pieces = $ossClient->generateMultiuploadParts($uploadFileSize, $partSize);
+        $responseUploadPart = array();
+        $uploadPosition = 0;
+        $isCheckMd5 = true;
+        foreach ($pieces as $i => $piece) {
+            $fromPos = $uploadPosition + (integer)$piece[$ossClient::OSS_SEEK_TO];
+            $toPos = (integer)$piece[$ossClient::OSS_LENGTH] + $fromPos - 1;
+            $upOptions = array(
+                // 上传文件。
+                $ossClient::OSS_FILE_UPLOAD => $uploadFile,
+                // 设置分片号。
+                $ossClient::OSS_PART_NUM => ($i + 1),
+                // 指定分片上传起始位置。
+                $ossClient::OSS_SEEK_TO => $fromPos,
+                // 指定文件长度。
+                $ossClient::OSS_LENGTH => $toPos - $fromPos + 1,
+                // 是否开启MD5校验，true为开启。
+                $ossClient::OSS_CHECK_MD5 => $isCheckMd5,
+            );
+            // 开启MD5校验。
+            if ($isCheckMd5) {
+                $contentMd5 = OssUtil::getMd5SumForFile($uploadFile, $fromPos, $toPos);
+                $upOptions[$ossClient::OSS_CONTENT_MD5] = $contentMd5;
+            }
+            try {
+                // 上传分片。
+                $responseUploadPart[] = $ossClient->uploadPart($bucket, $object, $uploadId, $upOptions);
+                return  'aaa'.time();
+            } catch(OssException $e) {
+                printf(__FUNCTION__ . ": initiateMultipartUpload, uploadPart - part#{$i} FAILED\n");
+                printf($e->getMessage() . "\n");
+                return;
+            }
+            printf(__FUNCTION__ . ": initiateMultipartUpload, uploadPart - part#{$i} OK\n");
+        }
+        // $uploadParts是由每个分片的ETag和分片号（PartNumber）组成的数组。
+        $uploadParts = array();
+        foreach ($responseUploadPart as $i => $eTag) {
+            $uploadParts[] = array(
+                'PartNumber' => ($i + 1),
+                'ETag' => $eTag,
+            );
+        }
+        /**
+         * 步骤3：完成上传。
+         */
+        try {
+            // 执行completeMultipartUpload操作时，需要提供所有有效的$uploadParts。OSS收到提交的$uploadParts后，会逐一验证每个分片的有效性。当所有的数据分片验证通过后，OSS将把这些分片组合成一个完整的文件。
+            $ossClient->completeMultipartUpload($bucket, $object, $uploadId, $uploadParts);
+            $res['msg'] = '上传成功!';
+            $res['path']=$waiwang.$object;
+            return json($res);
+        }  catch(OssException $e) {
+            printf(__FUNCTION__ . ": completeMultipartUpload FAILED\n");
+            printf($e->getMessage() . "\n");
+            return;
+        }
+        printf(__FUNCTION__ . ": completeMultipartUpload OK\n");
+    }
+
     //oss上传
     public function upload_video(){
         include EXTEND_PATH."aliyun-oss-php-sdk/autoload.php";
@@ -107,6 +212,8 @@ class Image extends Controller
             return $this->error($e->getMessage());
         }
     }
+
+
 
     public function index(Request $re,$imgtype=1)
     {

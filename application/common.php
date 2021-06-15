@@ -36,6 +36,52 @@ function sensitive_words_filter($str)
     return '';
 }
 
+// $url 是请求的链接
+// $postdata 是传输的数据，数组格式
+function curl_post( $url, $postdata ) {
+    $header = array(
+        'Accept: application/json',
+        'Content-Type: application/json',
+        'X-Postmark-Server-Token:504a38b4-ee03-41f6-b021-703bccda5b53'
+    );
+
+    //初始化
+    $curl = curl_init();
+    //设置抓取的url
+    curl_setopt($curl, CURLOPT_URL, $url);
+    //设置头文件的信息作为数据流输出
+    curl_setopt($curl, CURLOPT_HEADER, 0);
+    //设置获取的信息以文件流的形式返回，而不是直接输出。
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    // 超时设置
+    curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+
+    // 超时设置，以毫秒为单位
+    // curl_setopt($curl, CURLOPT_TIMEOUT_MS, 500);
+
+    // 设置请求头
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE );
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE );
+
+    $postdata=json_encode($postdata);
+    //设置post方式提交
+    curl_setopt($curl, CURLOPT_POST, 1);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, $postdata);
+    //执行命令
+    $data = curl_exec($curl);
+
+    // 显示错误信息
+    if (curl_error($curl)) {
+        print "Error: " . curl_error($curl);
+    } else {
+        // 打印返回的内容
+        var_dump($data);
+        curl_close($curl);
+    }
+}
+
 /**
  * @param string $text 翻译原文
  * @param string $source 源语言
@@ -501,5 +547,69 @@ function isDateValid($date, $formats = array('Y-m-d', 'Y/m/d')) {
     }
 
     return false;
+}
+
+
+/**
+ * 获取当前ip地址信息
+ * @return string $ip
+ * */
+function getip() {
+    static $ip = '';
+    $ip = $_SERVER['REMOTE_ADDR'];
+    if(isset($_SERVER['HTTP_CDN_SRC_IP'])) {
+        $ip = $_SERVER['HTTP_CDN_SRC_IP'];
+    } elseif (isset($_SERVER['HTTP_CLIENT_IP']) && preg_match('/^([0-9]{1,3}\.){3}[0-9]{1,3}$/', $_SERVER['HTTP_CLIENT_IP'])) {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif(isset($_SERVER['HTTP_X_FORWARDED_FOR']) AND preg_match_all('#\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}#s', $_SERVER['HTTP_X_FORWARDED_FOR'], $matches)) {
+        foreach ($matches[0] AS $xip) {
+            if (!preg_match('#^(10|172\.16|192\.168)\.#', $xip)) {
+                $ip = $xip;
+                break;
+            }
+        }
+    }
+    return $ip;
+}
+
+
+/**
+ * 通过ip获取当前位置信息
+ * @param string $ip
+ * @return array
+ * */
+function curl_get($ip,$ak='Gym2KVPOIWu8taayxggc8yT102egQnYL'){
+    $url='http://api.map.baidu.com/location/ip?ip='.$ip.'&ak='.$ak;
+    $header = array(
+        'Accept: application/json',
+    );
+    $curl = curl_init();
+    //设置抓取的url
+    curl_setopt($curl, CURLOPT_URL, $url);
+    //设置头文件的信息作为数据流输出
+    curl_setopt($curl, CURLOPT_HEADER, 0);
+    // 超时设置,以秒为单位
+    curl_setopt($curl, CURLOPT_TIMEOUT, 1);
+
+    // 超时设置，以毫秒为单位
+    // curl_setopt($curl, CURLOPT_TIMEOUT_MS, 500);
+
+    // 设置请求头
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+    //设置获取的信息以文件流的形式返回，而不是直接输出。
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+    //执行命令
+    $data = curl_exec($curl);
+
+    // 显示错误信息
+    if (curl_error($curl)) {
+        print "Error: " . curl_error($curl);
+    } else {
+        // 打印返回的内容
+        curl_close($curl);
+        return json_decode($data,true);
+    }
 }
 
