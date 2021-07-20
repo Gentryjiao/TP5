@@ -51,7 +51,7 @@ class Wxpay extends Controller
         //向微信接口地址提交json格式的$data和header的头部信息，得到返回值
         $res = $this->curl_post_https($url,$data,$header);
         $prepay_id=json_decode($res,true)['prepay_id'];
-        $paySign=$this->getWechartSign($mchid,$time,$noncestr,$prepay_id);
+        $paySign=$this->getWechartSign($appid,$time,$noncestr,'prepay_id='.$prepay_id);;
         $payData=[
             'timeStamp'=>$time,
             'nonceStr'=>$noncestr,
