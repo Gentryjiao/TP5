@@ -64,8 +64,8 @@ class Wxpay extends Controller
 
     //获取随机字符串
     public function getNonceStr(){
-        $strs="QWERTYUIOPASDFGHJKLZXCVBNM1234567890qwertyuiopasdfghjklzxcvbnm";
-        $name=substr(str_shuffle($strs),mt_rand(0,strlen($strs)-11),10);
+        $strs="QWERTYUIOPASDFGHJKLZXCVBNM1234567890";
+        $name=substr(str_shuffle($strs),mt_rand(0,strlen($strs)-11),32);
         return $name;
     }
 
