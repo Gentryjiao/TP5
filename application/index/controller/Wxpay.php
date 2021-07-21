@@ -128,7 +128,6 @@ class Wxpay extends Controller
         $orderData = json_decode($orderData, true);
         $out_trade_no=$orderData['out_trade_no'];
         //$out_trade_no为订单号
-        Db::name('config')->where('id',1)->update(['ceshi'=>$out_trade_no]);
 
 
         //应答微信支付已处理该订单的通知
