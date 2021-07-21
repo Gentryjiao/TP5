@@ -124,14 +124,17 @@ class Wxpay extends Controller
         $associatedData = $data['resource']['associated_data'];
         $ciphertext = $data['resource']['ciphertext'];
         $ciphertext = base64_decode($ciphertext);
-        $orderData = sodium_crypto_aead_aes256gcm_decrypt($ciphertext, $associatedData, $nonceStr, $this->config['apiv3_private_key']);
-        $orderData = json_decode($orderData, true);
-        $out_trade_no=$orderData['out_trade_no'];
-        //$out_trade_no为订单号
+        //关于sodium_crypto_aead_aes256gcm_decrypt函数：https://www.php.net/manual/en/sodium.installation.php
+        if (function_exists('\sodium_crypto_aead_aes256gcm_is_available') && \sodium_crypto_aead_aes256gcm_is_available()) {
+            $orderData = sodium_crypto_aead_aes256gcm_decrypt($ciphertext, $associatedData, $nonceStr, $this->config['apiv3_private_key']);
+            $orderData = json_decode($orderData, true);
+            $out_trade_no = $orderData['out_trade_no'];
+            //$out_trade_no为订单号
 
 
-        //应答微信支付已处理该订单的通知
-        return ['code' => 'SUCCESS', 'message' =>'ok'];
+            //应答微信支付已处理该订单的通知
+            return ['code' => 'SUCCESS', 'message' => 'ok'];
+        }
     }
 
 
