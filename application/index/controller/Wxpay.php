@@ -8,18 +8,23 @@ class Wxpay extends Controller
     private $config = array (
         //商户号
         'mchid'=>'',
-        //应用ID,您的APPID
+        //应用ID,您的APPID。*
         'appid' => "",
         //异步通知地址*
         'notify_url' => "",
         //商户私钥*
         'apiv3_private_key' => "",
         //证书序列号
-        'xlid'=>''
+        'xlid'=>'',
+        //退款回调地址
+        'refund_notify_url'=> "",
     );
 
     //统一下单
     public function wxpay(){
+        $order_sn=$this->request->param('order_sn','');
+        if(empty($order_sn)) return json(['code'=>202,'msg'=>'缺少参数order_sn']);
+
         // 官方提供网址
         $url = "https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi";
         $urlarr = parse_url($url); //拆解为：[scheme=>https,host=>api.mch.weixin.qq.com,path=>/v3/pay/transactions/native]
@@ -31,12 +36,12 @@ class Wxpay extends Controller
         $data = array();
         $data['appid'] = $appid;
         $data['mchid'] = $mchid;
-        $data['description'] = '描述';//商品描述
-        $data['out_trade_no'] = time().rand(1111,9999);//订单编号，订单号在微信支付里是唯一的
+        $data['description'] = '商品描述';//商品描述
+        $data['out_trade_no'] = $order_sn;//订单编号，订单号在微信支付里是唯一的
         $data['notify_url'] = $this->config['notify_url'];//需根据自己的情况修改回调接口，也可以为空
         $data['amount']['total'] = 1;//金额 单位 分
         $data['scene_info']['payer_client_ip'] = $_SERVER["REMOTE_ADDR"];;//场景ip
-        $data['payer']['openid']="dasdaaaxxxxx"; //openid
+        $data['payer']['openid']='openid'; //openid
         $data = json_encode($data); //变为json格式
         //签名，包含了$data数据、微信指定地址、随机数和时间
         $key = $this->getSign($data,$urlarr['path'],$noncestr,$time);
@@ -51,7 +56,7 @@ class Wxpay extends Controller
         //向微信接口地址提交json格式的$data和header的头部信息，得到返回值
         $res = $this->curl_post_https($url,$data,$header);
         $prepay_id=json_decode($res,true)['prepay_id'];
-        $paySign=$this->getWechartSign($appid,$time,$noncestr,'prepay_id='.$prepay_id);;
+        $paySign=$this->getWechartSign($appid,$time,$noncestr,'prepay_id='.$prepay_id);
         $payData=[
             'timeStamp'=>$time,
             'nonceStr'=>$noncestr,
@@ -59,7 +64,7 @@ class Wxpay extends Controller
             'signType'=>'RSA',
             'paySign'=>$paySign
         ];
-        return_msg(200,'ok',$payData);
+        return json(['code'=>200,'msg'=>'ok','data'=>$payData]);
     }
 
     //获取随机字符串
@@ -72,14 +77,14 @@ class Wxpay extends Controller
     //微信支付签名
     function getSign($data=array(),$url,$randstr,$time){
         $str = "POST"."\n".$url."\n".$time."\n".$randstr."\n".$data."\n";
-        $key = file_get_contents('apiclient_key.pem');//在商户平台下载的秘钥
+        $key = file_get_contents('apiclient_key.pem');//在商户平台下载的秘钥,读取到变量
         $str = $this->getSha256WithRSA($str,$key);
         return $str;
     }
     //调起支付的签名
     function getWechartSign($appid,$timeStamp,$noncestr,$prepay_id){
         $str = $appid."\n".$timeStamp."\n".$noncestr."\n".$prepay_id."\n";
-        $key = file_get_contents('apiclient_key.pem');
+        $key = file_get_contents('apiclient_key.pem');//在商户平台下载的秘钥,读取到变量
         $str = $this->getSha256WithRSA($str,$key);
         return $str;
     }
@@ -124,15 +129,94 @@ class Wxpay extends Controller
         $associatedData = $data['resource']['associated_data'];
         $ciphertext = $data['resource']['ciphertext'];
         $ciphertext = base64_decode($ciphertext);
-        $orderData = sodium_crypto_aead_aes256gcm_decrypt($ciphertext, $associatedData, $nonceStr, $this->config['apiv3_private_key']);
-        $orderData = json_decode($orderData, true);
-        $out_trade_no=$orderData['out_trade_no'];
-        //$out_trade_no为订单号
-        Db::name('config')->where('id',1)->update(['ceshi'=>$out_trade_no]);
+        if (function_exists('\sodium_crypto_aead_aes256gcm_is_available') && \sodium_crypto_aead_aes256gcm_is_available()) {
+            //$APIv3_KEY就是在商户平台后端设置是APIv3秘钥
+            $orderData = \sodium_crypto_aead_aes256gcm_decrypt($ciphertext, $associatedData, $nonceStr, $this->config['apiv3_private_key']);
+            $orderData = json_decode($orderData, true);
+            if ($orderData['trade_state']=='SUCCESS'){
+                $order_sn=$orderData['out_trade_no']; //商户订单号
+                $transaction_id=$orderData['transaction_id']; //微信订单号
+                // 启动事务
+                Db::startTrans();
+                try{
+
+                    /*业务处理*/
+
+                    Db::commit();
+                    //应答微信支付已处理该订单的通知
+                    return json(['code' => 'SUCCESS', 'message' =>'ok']);
+                } catch (\Exception $e) {
+                    // 回滚事务
+                    Db::rollback();
+                    return json(['code' => 'ERROR', 'message' =>'no']);
+                }
+            }
+        }
+    }
 
 
-        //应答微信支付已处理该订单的通知
-        return ['code' => 'SUCCESS', 'message' =>'ok'];
+    //退款
+    public function Refund($order_sn){
+        if(!$order_sn) return ['code'=>0,'msg'=>'订单号不能为空'];
+        $order_shop_info=Db::name('order_shop')->where('order_sn',$order_sn)->find();
+        if(empty($order_shop_info) || empty($order_shop_info['transaction_id'])) return ['code'=>0,'msg'=>'订单错误'];
+        $time=time();
+        $out_refund_no=$time.rand(1111,9999);
+        $refundData=[
+//            'out_trade_no'=>$order_sn, //商户订单号 二选一
+            'transaction_id'=>$order_shop_info['transaction_id'],  //微信生成的订单号 二选一
+            'out_refund_no'=>$out_refund_no,
+            'reason'=>'商品退款',
+            'notify_url'=>$this->config['refund_notify_url'],
+            'funds_account'=>'AVAILABLE',
+            'amount'=>[
+                'refund'=>1,
+                'total'=>1,
+                'currency'=>'CNY'
+            ]
+        ];
+        $url='https://api.mch.weixin.qq.com/v3/refund/domestic/refunds';
+        $urlarr = parse_url($url); //拆解为：[scheme=>https,host=>api.mch.weixin.qq.com,path=>/v3/pay/transactions/native]
+        $mchid = $this->config['mchid'];//商户ID
+        $xlid = $this->config['xlid'];//证书序列号 可在这个网址中查询 https://myssl.com/cert_decode.html
+        $refundData=json_encode($refundData);
+        $nonce = $this->getNonceStr();
+        $key = $this->getSign($refundData,$urlarr['path'],$nonce,$time);
+        $token = sprintf('mchid="%s",serial_no="%s",nonce_str="%s",timestamp="%d",signature="%s"',$mchid,$xlid,$nonce,$time,$key);
+        $header  = array(
+            'Accept: application/json',
+            'Content-Type: application/json',
+            'User-Agent:*/*',
+            'Authorization: WECHATPAY2-SHA256-RSA2048 '.$token
+        );
+        $res=$this->curl_post_https($url,$refundData,$header);
+        $res_array=json_decode($res,true);
+        if(($res_array['status']=='PROCESSING' || $res_array['status']=='SUCCESS') && isset($res_array['status'])){
+            return ['code'=>1,'msg'=>'退款成功'];
+        }else{
+            return ['code'=>0,'msg'=>$res_array['message']];
+        }
+    }
+
+    //退款回调地址
+    public function refund_notify(){
+        $notifiedData = file_get_contents('php://input');
+        $data = json_decode($notifiedData, true);
+        $nonceStr = $data['resource']['nonce'];
+        $associatedData = $data['resource']['associated_data'];
+        $ciphertext = $data['resource']['ciphertext'];
+        $ciphertext = base64_decode($ciphertext);
+        if (function_exists('\sodium_crypto_aead_aes256gcm_is_available') && \sodium_crypto_aead_aes256gcm_is_available()) {
+            //$APIv3_KEY就是在商户平台后端设置是APIv3秘钥
+            $orderData = \sodium_crypto_aead_aes256gcm_decrypt($ciphertext, $associatedData, $nonceStr, $this->config['apiv3_private_key']);
+            $orderData = json_decode($orderData, true);
+            if ($orderData['refund_status']=='SUCCESS'){
+                $transaction_id=$orderData['transaction_id'];
+
+                /*业务处理*/
+                return json(['code'=>'SUCCESS','message'=>'成功']);
+            }
+        }
     }
 
 
