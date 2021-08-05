@@ -206,6 +206,7 @@ class Wxpay extends Controller
         $associatedData = $data['resource']['associated_data'];
         $ciphertext = $data['resource']['ciphertext'];
         $ciphertext = base64_decode($ciphertext);
+        //为了使用这个扩展，你必须将extension=php_sodium.dll添加到php.ini
         if (function_exists('\sodium_crypto_aead_aes256gcm_is_available') && \sodium_crypto_aead_aes256gcm_is_available()) {
             //$APIv3_KEY就是在商户平台后端设置是APIv3秘钥
             $orderData = \sodium_crypto_aead_aes256gcm_decrypt($ciphertext, $associatedData, $nonceStr, $this->config['apiv3_private_key']);
