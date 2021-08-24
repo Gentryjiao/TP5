@@ -170,6 +170,28 @@ function query_address($key_words='河北省保定市望都县南王疃村'){
     }
 }
 
+/**
+ * 百度地图地址正解析
+ * @param string $address 地址
+ * @param string $ak 百度开放平台key
+ * @param string $ret_coordtype gcj02ll（国测局坐标）bd09mc（百度墨卡托坐标）bd09ll（百度经纬度坐标）
+ * */
+function adddresToCoordinates($address,$ak='Gym2KVPOIWu8taayxggc8yT102egQnYL',$ret_coordtype='gcj02ll')
+{
+    $url='https://api.map.baidu.com/geocoding/v3/?address='.$address.'&output=json&ak='.$ak.'&callback=showLocation&ret_coordtype='.$ret_coordtype;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_HEADER,0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,false);
+    $output = curl_exec($ch);
+    curl_close($ch);
+    $output=substr(substr($output,strpos($output,'('),strrpos($output,')')),1,-1);
+    $output=json_decode($output, true);
+    return $output;
+}
+
 // $url 是请求的链接
 // $postdata 是传输的数据，数组格式
 function curl_post( $url, $postdata ) {
@@ -178,7 +200,6 @@ function curl_post( $url, $postdata ) {
         'Content-Type: application/json',
         'X-Postmark-Server-Token:504a38b4-ee03-41f6-b021-703bccda5b53'
     );
-
     //初始化
     $curl = curl_init();
     //设置抓取的url
