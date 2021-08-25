@@ -2,7 +2,6 @@
 namespace app\api\controller;
 use think\Controller;
 use think\Db;
-use think\Request;
 class Wxpay extends Controller
 {
     private $config = array (
@@ -22,7 +21,7 @@ class Wxpay extends Controller
 
     //统一下单
     public function wxpay(){
-        $order_sn=$this->request->param('order_sn','');
+        $out_trade_no=$this->request->param('out_trade_no','');
         if(empty($order_sn)) return json(['code'=>202,'msg'=>'缺少参数order_sn']);
 
         // 官方提供网址
@@ -32,21 +31,21 @@ class Wxpay extends Controller
         $noncestr = $this->getNonceStr();
         $appid = $this->config['appid'];//appID
         $mchid = $this->config['mchid'];//商户ID
-        $xlid = $this->config['xlid'];//证书序列号 可在这个网址中查询 https://myssl.com/cert_decode.html
+        $xlid = $this->config['xlid'];//证书序列号
         $data = array();
         $data['appid'] = $appid;
         $data['mchid'] = $mchid;
         $data['description'] = '商品描述';//商品描述
-        $data['out_trade_no'] = $order_sn;//订单编号，订单号在微信支付里是唯一的
+        $data['out_trade_no'] = $out_trade_no;//订单编号，订单号在微信支付里是唯一的
         $data['notify_url'] = $this->config['notify_url'];//需根据自己的情况修改回调接口，也可以为空
         $data['amount']['total'] = 1;//金额 单位 分
         $data['scene_info']['payer_client_ip'] = $_SERVER["REMOTE_ADDR"];;//场景ip
         $data['payer']['openid']='openid'; //openid
-        $data = json_encode($data); //变为json格式
+        $data = json_encode($data);
         //签名，包含了$data数据、微信指定地址、随机数和时间
         $key = $this->getSign($data,$urlarr['path'],$noncestr,$time);
-        //头部信息
         $token = sprintf('mchid="%s",serial_no="%s",nonce_str="%s",timestamp="%d",signature="%s"',$mchid,$xlid,$noncestr,$time,$key);
+        //头部信息
         $header  = array(
             'Accept: application/json',
             'Content-Type: application/json',
@@ -81,6 +80,7 @@ class Wxpay extends Controller
         $str = $this->getSha256WithRSA($str,$key);
         return $str;
     }
+
     //调起支付的签名
     function getWechartSign($appid,$timeStamp,$noncestr,$prepay_id){
         $str = $appid."\n".$timeStamp."\n".$noncestr."\n".$prepay_id."\n";
@@ -99,7 +99,7 @@ class Wxpay extends Controller
     }
 
     /* PHP CURL HTTPS POST */
-    function curl_post_https($url,$data,$header){ // 模拟提交数据函数
+    public function curl_post_https($url,$data,$header){ // 模拟提交数据函数
         $curl = curl_init(); // 启动一个CURL会话
         curl_setopt($curl, CURLOPT_URL, $url); // 要访问的地址
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查
@@ -129,6 +129,7 @@ class Wxpay extends Controller
         $associatedData = $data['resource']['associated_data'];
         $ciphertext = $data['resource']['ciphertext'];
         $ciphertext = base64_decode($ciphertext);
+        //php>7.1,为了使用这个扩展，你必须将extension=php_sodium.dll添加到php.ini
         if (function_exists('\sodium_crypto_aead_aes256gcm_is_available') && \sodium_crypto_aead_aes256gcm_is_available()) {
             //$APIv3_KEY就是在商户平台后端设置是APIv3秘钥
             $orderData = \sodium_crypto_aead_aes256gcm_decrypt($ciphertext, $associatedData, $nonceStr, $this->config['apiv3_private_key']);
@@ -139,7 +140,6 @@ class Wxpay extends Controller
                 // 启动事务
                 Db::startTrans();
                 try{
-
                     /*业务处理*/
 
                     Db::commit();
@@ -156,29 +156,33 @@ class Wxpay extends Controller
 
 
     //退款
-    public function Refund($order_sn){
-        if(!$order_sn) return ['code'=>0,'msg'=>'订单号不能为空'];
-        $order_shop_info=Db::name('order_shop')->where('order_sn',$order_sn)->find();
-        if(empty($order_shop_info) || empty($order_shop_info['transaction_id'])) return ['code'=>0,'msg'=>'订单错误'];
+    public function Refund($transaction_id,$out_trade_no){ //商户订单号,微信生成的退款订单号 二选一即可
         $time=time();
         $out_refund_no=$time.rand(1111,9999);
         $refundData=[
-//            'out_trade_no'=>$order_sn, //商户订单号 二选一
-            'transaction_id'=>$order_shop_info['transaction_id'],  //微信生成的订单号 二选一
             'out_refund_no'=>$out_refund_no,
             'reason'=>'商品退款',
             'notify_url'=>$this->config['refund_notify_url'],
             'funds_account'=>'AVAILABLE',
             'amount'=>[
-                'refund'=>1,
-                'total'=>1,
+                'refund'=>1, //退款标价金额，单位为分，可以做部分退款
+                'total'=>1, //订单总金额，单位为分
                 'currency'=>'CNY'
             ]
         ];
+        if(!$transaction_id){ //商户订单号,微信生成的退款订单号 二选一即可
+            if(!$out_trade_no){
+                return ['code'=>0,'msg'=>'退款订单号不能为空'];
+            }else{
+                $refundData['out_trade_no']=$out_trade_no;
+            }
+        }else{
+            $refundData['transaction_id']=$transaction_id;
+        }
         $url='https://api.mch.weixin.qq.com/v3/refund/domestic/refunds';
         $urlarr = parse_url($url); //拆解为：[scheme=>https,host=>api.mch.weixin.qq.com,path=>/v3/pay/transactions/native]
         $mchid = $this->config['mchid'];//商户ID
-        $xlid = $this->config['xlid'];//证书序列号 可在这个网址中查询 https://myssl.com/cert_decode.html
+        $xlid = $this->config['xlid'];//证书序列号
         $refundData=json_encode($refundData);
         $nonce = $this->getNonceStr();
         $key = $this->getSign($refundData,$urlarr['path'],$nonce,$time);
@@ -206,13 +210,13 @@ class Wxpay extends Controller
         $associatedData = $data['resource']['associated_data'];
         $ciphertext = $data['resource']['ciphertext'];
         $ciphertext = base64_decode($ciphertext);
-        //为了使用这个扩展，你必须将extension=php_sodium.dll添加到php.ini
+        //php>7.1,为了使用这个扩展，你必须将extension=php_sodium.dll添加到php.ini
         if (function_exists('\sodium_crypto_aead_aes256gcm_is_available') && \sodium_crypto_aead_aes256gcm_is_available()) {
             //$APIv3_KEY就是在商户平台后端设置是APIv3秘钥
             $orderData = \sodium_crypto_aead_aes256gcm_decrypt($ciphertext, $associatedData, $nonceStr, $this->config['apiv3_private_key']);
             $orderData = json_decode($orderData, true);
             if ($orderData['refund_status']=='SUCCESS'){
-                $transaction_id=$orderData['transaction_id'];
+                $transaction_id=$orderData['transaction_id']; //退款单号
 
                 /*业务处理*/
                 return json(['code'=>'SUCCESS','message'=>'成功']);
