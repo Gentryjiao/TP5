@@ -265,6 +265,10 @@ class ComposerStaticInit34eab264abc3ceb8f815f4aeec1c4520
             array (
                 0 => __DIR__ . '/..' . '/pimple/pimple/src',
             ),
+            'PayPal' => 
+            array (
+                0 => __DIR__ . '/..' . '/paypal/rest-api-sdk-php/lib',
+            ),
         ),
     );
 

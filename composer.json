@@ -27,7 +27,8 @@
         "phpoffice/phpspreadsheet": "^1.6",
         "jenssegers/date": "^3.4",
         "mtdowling/cron-expression": "^1.2",
-        "firebase/php-jwt": "^5.2"
+        "firebase/php-jwt": "^5.2",
+        "paypal/rest-api-sdk-php": "^1.14"
     },
     "extra": {
         "think-path": "thinkphp"

@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Pimple' => array($vendorDir . '/pimple/pimple/src'),
+    'PayPal' => array($vendorDir . '/paypal/rest-api-sdk-php/lib'),
 );
