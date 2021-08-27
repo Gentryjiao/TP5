@@ -483,26 +483,22 @@ function hide_phone($str){
  * @param  string $content 二维码内容
  * @return string          二维码保存路径
  */
-function userimg($content){
-
+function generateQrCode($content)
+{
     //引入phpqrcode类库文件
     vendor('phpqrcode.phpqrcode');
     $value = $content;         //二维码内容
     $errorCorrectionLevel = 'L';  //容错级别
     $matrixPointSize = 8;      //生成图片大小
-
     // 判断是否有这个文件夹  没有的话就创建一个
     if(!is_dir("qrcode")){
-        // 创建文件加
+        // 创建文件夹
         mkdir("qrcode");
     }
-
     // 设置二维码图片名称，以及存放的路径
     $filename = 'qrcode/'.time().rand(10000,9999999).'.png';
-
     // 使用类库生成二维码
     QRcode::png($value,$filename , $errorCorrectionLevel, $matrixPointSize, 2);
-
     // 　//如果需要转换成base64数据，解开下面这行注释即可
     // 　$image_data = chunk_split(base64_encode(fread(fopen($filename, 'r'), filesize($filename))));
     return $filename;
