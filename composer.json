@@ -29,7 +29,8 @@
         "mtdowling/cron-expression": "^1.2",
         "firebase/php-jwt": "^5.2",
         "paypal/rest-api-sdk-php": "^1.14",
-        "php-amqplib/php-amqplib": ">=2.6.1"
+        "php-amqplib/php-amqplib": "^3.0",
+        "workerman/gateway-worker": "^3.0"
     },
     "extra": {
         "think-path": "thinkphp"

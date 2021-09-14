@@ -11,6 +11,7 @@ class ComposerStaticInit34eab264abc3ceb8f815f4aeec1c4520
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
         'abede361264e2ae69ec1eee813a101af' => __DIR__ . '/..' . '/markbaker/complex/classes/src/functions/abs.php',
         '21a5860fbef5be28db5ddfbc3cca67c4' => __DIR__ . '/..' . '/markbaker/complex/classes/src/functions/acos.php',
         '1546e3f9d127f2a9bb2d1b6c31c26ef1' => __DIR__ . '/..' . '/markbaker/complex/classes/src/functions/acosh.php',
@@ -83,6 +84,14 @@ class ComposerStaticInit34eab264abc3ceb8f815f4aeec1c4520
             'think\\captcha\\' => 14,
             'think\\' => 6,
         ),
+        'p' => 
+        array (
+            'phpseclib3\\' => 11,
+        ),
+        'W' => 
+        array (
+            'Workerman\\' => 10,
+        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
@@ -98,6 +107,8 @@ class ComposerStaticInit34eab264abc3ceb8f815f4aeec1c4520
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
             'PhpOffice\\PhpSpreadsheet\\' => 25,
+            'PhpAmqpLib\\' => 11,
+            'ParagonIE\\ConstantTime\\' => 23,
         ),
         'O' => 
         array (
@@ -117,6 +128,7 @@ class ComposerStaticInit34eab264abc3ceb8f815f4aeec1c4520
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
+            'GatewayWorker\\' => 14,
         ),
         'F' => 
         array (
@@ -160,6 +172,14 @@ class ComposerStaticInit34eab264abc3ceb8f815f4aeec1c4520
             0 => __DIR__ . '/../..' . '/thinkphp/library/think',
             1 => __DIR__ . '/..' . '/topthink/think-image/src',
         ),
+        'phpseclib3\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
+        ),
+        'Workerman\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/workerman/workerman',
+        ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
@@ -200,6 +220,14 @@ class ComposerStaticInit34eab264abc3ceb8f815f4aeec1c4520
         array (
             0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
         ),
+        'PhpAmqpLib\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-amqplib/php-amqplib/PhpAmqpLib',
+        ),
+        'ParagonIE\\ConstantTime\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src',
+        ),
         'Overtrue\\Socialite\\' => 
         array (
             0 => __DIR__ . '/..' . '/overtrue/socialite/src',
@@ -227,6 +255,10 @@ class ComposerStaticInit34eab264abc3ceb8f815f4aeec1c4520
         'GuzzleHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+        ),
+        'GatewayWorker\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/workerman/gateway-worker/src',
         ),
         'FormBuilder\\' => 
         array (
