@@ -28,7 +28,8 @@
         "jenssegers/date": "^3.4",
         "mtdowling/cron-expression": "^1.2",
         "firebase/php-jwt": "^5.2",
-        "paypal/rest-api-sdk-php": "^1.14"
+        "paypal/rest-api-sdk-php": "^1.14",
+        "php-amqplib/php-amqplib": ">=2.6.1"
     },
     "extra": {
         "think-path": "thinkphp"
