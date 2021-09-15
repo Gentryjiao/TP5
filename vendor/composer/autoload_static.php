@@ -179,6 +179,7 @@ class ComposerStaticInit34eab264abc3ceb8f815f4aeec1c4520
         'Workerman\\' => 
         array (
             0 => __DIR__ . '/..' . '/workerman/workerman',
+            1 => __DIR__ . '/..' . '/workerman/workerman-for-win',
         ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
@@ -259,6 +260,7 @@ class ComposerStaticInit34eab264abc3ceb8f815f4aeec1c4520
         'GatewayWorker\\' => 
         array (
             0 => __DIR__ . '/..' . '/workerman/gateway-worker/src',
+            1 => __DIR__ . '/..' . '/workerman/gateway-worker-for-win/src',
         ),
         'FormBuilder\\' => 
         array (
