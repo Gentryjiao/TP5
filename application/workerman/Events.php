@@ -37,10 +37,9 @@ class Events
      */
     public static function onConnect($client_id)
     {
-        // 向当前client_id发送数据 
-        Gateway::sendToClient($client_id, "Hello $client_id\r\n");
-        // 向所有人发送
-        Gateway::sendToAll("client_id login\r\n");
+        // 向当前client_id发送数据
+        $data=json_encode(['type'=>'init','client_id'=>$client_id,'date'=>date('Y-m-d H:i:s')]);
+        Gateway::sendToClient($client_id, $data);
     }
     
    /**
@@ -50,10 +49,15 @@ class Events
     */
    public static function onMessage($client_id, $message)
    {
-        $data=json_encode(['type'=>1,'client_id'=>$client_id,'message'=>$message,'date'=>date('Y-m-d H:i:s')]);
-        // 向所有人发送 
-        Gateway::sendToAll($data);
-
+        $data=json_decode($message,true);
+        switch ($data['type']){
+            case 'init': //绑定uid
+                Gateway::bindUid($client_id, $data['from_user_id']);
+                break;
+            case 'messages': //发送消息
+                Gateway::sendToUid($data['to_user_id'], json_encode($data));
+            break;
+        }
    }
    
    /**
@@ -62,7 +66,8 @@ class Events
     */
    public static function onClose($client_id)
    {
-       // 向所有人发送 
-       GateWay::sendToAll("$client_id logout\r\n");
+       $data=json_encode(['type'=>'logout','messages'=>"$client_id logout"]);
+       // 向所有人发送
+       GateWay::sendToAll($data);
    }
 }
