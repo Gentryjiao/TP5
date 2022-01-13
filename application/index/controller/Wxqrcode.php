@@ -33,6 +33,11 @@ class Wxqrcode extends Controller
         return $tmpInfo; // 返回数据
     }
 
+    /**
+     * 生成微信分享二维码
+     * @param string $path 路径
+     * @param int $id 用户id
+     * */
     public function miniewm($path,$id){
         $myfile=fopen(ROOT_PATH.$path,'w+');
         $config['appid'] = 'wxc4c9eb9b2452e386';
